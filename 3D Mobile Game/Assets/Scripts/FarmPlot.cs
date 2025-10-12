@@ -1,45 +1,124 @@
 using UnityEngine;
+using System.Collections;
 
 public class FarmPlot : MonoBehaviour
 {
-
     [Header("Plot State")]
+
     public bool isOwned = false;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    // Different states a plot can be in
+    // (!! Could add isOwned as a state instead of bool?? !!)
+    public enum PlotState
     {
-        
+        Empty,
+        Growing,
+        ReadyToHarvest
     }
+    public PlotState state = PlotState.Empty;
 
-    void OnMouseDown()
+    [Header("Growth Settings")]
+    public float growthDuration = 5f;
+    public GameObject seedlingPrefab;
+    public GameObject grownPrefab;
+
+    private GameObject currentCropPrefab;
+    public Transform cropAnchor;
+
+    // Method to handling when the player taps on the plot
+    public void HandleTap()
     {
+        // Plot unlocking
+        // !! LATER CHANGE THIS TO REQUIRE CURRENCY TO UNLOCK !!
         if (!isOwned)
         {
             UnlockPlot();
+            return;
         }
-        else
+
+        // Check what state the plot is currently in
+        switch (state)
         {
-            Debug.Log($"{name} has already been unlocked");
+            // If empty, plant seed
+            case PlotState.Empty:
+                PlantSeed();
+                break;
+
+            // If the seed is still growing, do nothing (for now)
+            case PlotState.Growing:
+                Debug.Log($"{name}: crop is still growing...");
+                break;
+
+            // If ready to harvest, handle harvesting
+            case PlotState.ReadyToHarvest:
+                HarvestCrop();
+                break;
         }
     }
 
-    public void UnlockPlot()
+    private void PlantSeed()
+    {
+        // Change state
+        state = PlotState.Growing;
+        Debug.Log($"{name}: planted a seed!");
+
+        // Instantiate the seed prefab at the anchor position on the plot
+        if (seedlingPrefab)
+        {
+            if (cropAnchor == null)
+            {
+                Debug.LogWarning($"{name} has no crop anchor set!");
+                cropAnchor = transform;
+            }
+
+            GameObject crop = Instantiate(seedlingPrefab, cropAnchor.position, cropAnchor.rotation);
+            crop.transform.SetParent(cropAnchor, true);
+            crop.transform.localScale = Vector3.one;
+
+            currentCropPrefab = crop;
+        }
+
+        // Start growth timer
+        StartCoroutine(GrowCrop());
+    }
+
+    private IEnumerator GrowCrop()
+    {
+        yield return new WaitForSeconds(growthDuration);
+
+        state = PlotState.ReadyToHarvest;
+        Debug.Log($"{name}: crop is ready to harvest!");
+
+        // Swap to grown crop prefab
+        if (currentCropPrefab)
+        {
+            Destroy(currentCropPrefab);
+        }
+        if (grownPrefab)
+        {
+            currentCropPrefab = Instantiate(grownPrefab, transform.position + Vector3.up * 0.5f, Quaternion.identity, transform);
+        }
+    }
+
+    private void HarvestCrop()
+    {
+        Debug.Log($"{name}: harvested crop!");
+
+        state = PlotState.Empty;
+        if (currentCropPrefab) Destroy(currentCropPrefab);
+
+        // !! CURRENCY ADDITION WILL GO HERE !!
+    }
+
+    private void UnlockPlot()
     {
         isOwned = true;
         Debug.Log($"{name} unlocked!");
 
-        // Swap to unlocked prefab
-        SwapPrefab();
-    }
-
-    private void SwapPrefab()
-    {
-        // Get reference to the unlocked prefab from manager
         var grid = FindFirstObjectByType<FarmGrid>();
         if (grid == null || grid.unlockedPlotPrefab == null)
         {
-            Debug.Log("FarmGrid or unlocked prefab not found / assigned");
+            Debug.LogWarning("FarmGrid or unlocked prefab not found / assigned");
             return;
         }
 

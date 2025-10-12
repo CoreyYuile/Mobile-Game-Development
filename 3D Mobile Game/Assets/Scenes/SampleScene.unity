@@ -665,6 +665,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1386649194}
   - component: {fileID: 1386649193}
+  - component: {fileID: 1386649195}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -684,10 +685,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62cbc74a36e69c34baa5f16501c815cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 10
-  height: 10
+  gridWidth: 10
+  gridHeight: 10
   cellSize: 5
-  unlockedPlotPrefab: {fileID: 6814321805485124547, guid: 04b84e8751a9bdc4daada54418319f5e, type: 3}
+  unlockedPlotPrefab: {fileID: 1144092783415503332, guid: d6855b2f8f00e1449bc291258b024774, type: 3}
   lockedPlotPrefab: {fileID: 9175357505133055139, guid: 98aeed20a06f2474689fa3247885ab5b, type: 3}
 --- !u!4 &1386649194
 Transform:
@@ -704,6 +705,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1386649195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1386649192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ee052fb899c40441813c1316f4c95df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 330585545}
+  tapThreshold: 15
 --- !u!1 &1944144044
 GameObject:
   m_ObjectHideFlags: 0
