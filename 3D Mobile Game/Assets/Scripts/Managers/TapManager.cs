@@ -19,13 +19,16 @@ public class TapManager : MonoBehaviour
 
     void Update()
     {
-        // Ignore UI touches
-        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(0))
-            return;
         // Check if only one finger is held on the screen
         if (Input.touchCount == 1)
         {
             Touch touch = Input.GetTouch(0);
+
+            // Ignore UI touches
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+            {
+                return;
+            }
 
             switch (touch.phase)
             {

@@ -25,6 +25,22 @@ public class FarmPlot : MonoBehaviour
     private GameObject currentCropPrefab;
     public Transform cropAnchor;
 
+    [Header("Plot Misc Settings")]
+
+    public int unlockCost = 50;
+    public int harvestReward = 20;
+
+    //[Header("References")]
+
+    //private MenuManager menuManager;
+    //private MoneyManager moneyManager;
+
+    private void Start()
+    {
+        //menuManager = FindAnyObjectByType<MenuManager>();
+        //moneyManager = FindAnyObjectByType<MoneyManager>();
+    }
+
     // Method to handling when the player taps on the plot
     public void HandleTap()
     {
@@ -32,7 +48,8 @@ public class FarmPlot : MonoBehaviour
         // !! LATER CHANGE THIS TO REQUIRE CURRENCY TO UNLOCK !!
         if (!isOwned)
         {
-            UnlockPlot();
+            //UnlockPlot();
+            MenuManager.Instance.ShowBuyPlotPopup(this, unlockCost);
             return;
         }
 
@@ -105,12 +122,16 @@ public class FarmPlot : MonoBehaviour
         Debug.Log($"{name}: harvested crop!");
 
         state = PlotState.Empty;
-        if (currentCropPrefab) Destroy(currentCropPrefab);
+        if (currentCropPrefab)
+        {
+            Destroy(currentCropPrefab);
+        }
 
-        // !! CURRENCY ADDITION WILL GO HERE !!
+        MoneyManager.Instance.AddMoney(harvestReward);
+        Debug.Log($"Harvested at {name} and earned {harvestReward}");
     }
 
-    private void UnlockPlot()
+    public void UnlockPlot()
     {
         isOwned = true;
         Debug.Log($"{name} unlocked!");

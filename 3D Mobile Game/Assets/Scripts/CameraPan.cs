@@ -45,7 +45,7 @@ public class CameraPan : MonoBehaviour
             Vector3 direction = touch - GetWorldPosition(groundZ);
             Camera.main.transform.position += direction;
         }
-        Zoom(Input.GetAxis("Mouse ScrollWheel"));
+        Zoom(Input.GetAxis("Mouse ScrollWheel") * 5);
     }
 
     void Zoom(float increment)
