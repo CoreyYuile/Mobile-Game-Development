@@ -78,4 +78,9 @@ public class MenuManager : MonoBehaviour
             buyPlotPopup.SetActive(false);
         }
     }
+
+    public void OnShowRewardedAd()
+    {
+        AdsManager.instance.rewardedAds.ShowRewardedAd();
+    }
 }

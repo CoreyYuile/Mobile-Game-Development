@@ -25,7 +25,7 @@ public class TapManager : MonoBehaviour
             Touch touch = Input.GetTouch(0);
 
             // Ignore UI touches
-            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
             {
                 return;
             }
@@ -47,7 +47,7 @@ public class TapManager : MonoBehaviour
                 case TouchPhase.Ended:
                     // Get the end position of the tap, check if the start and end are the same
                     touchEndPos = touch.position;
-                    if (touchStartPos != touchEndPos)
+                    if (Vector2.Distance(touchStartPos, touchEndPos) > tapThreshold)
                     {
                         isTapping = false;
                     }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class FarmPlot : MonoBehaviour
 {
@@ -30,6 +31,8 @@ public class FarmPlot : MonoBehaviour
     public int unlockCost = 50;
     public int harvestReward = 20;
 
+    private DateTime plantedUTCTime;
+
     //[Header("References")]
 
     //private MenuManager menuManager;
@@ -39,6 +42,29 @@ public class FarmPlot : MonoBehaviour
     {
         //menuManager = FindAnyObjectByType<MenuManager>();
         //moneyManager = FindAnyObjectByType<MoneyManager>();
+    }
+
+    private void Update()
+    {
+        if (state == PlotState.Growing)
+        {
+            double elapsedSeconds = (DateTime.UtcNow - plantedUTCTime).TotalSeconds;
+            if (elapsedSeconds >= growthDuration)
+            {
+                state = PlotState.ReadyToHarvest;
+                Debug.Log($"{name}: crop is ready to harvest!");
+
+                // Swap to grown crop prefab
+                if (currentCropPrefab)
+                {
+                    Destroy(currentCropPrefab);
+                }
+                if (grownPrefab)
+                {
+                    currentCropPrefab = Instantiate(grownPrefab, transform.position + Vector3.up * 0.5f, Quaternion.identity, transform);
+                }
+            }
+        }
     }
 
     // Method to handling when the player taps on the plot
@@ -75,6 +101,8 @@ public class FarmPlot : MonoBehaviour
 
     private void PlantSeed()
     {
+        plantedUTCTime = DateTime.UtcNow;
+
         // Change state
         state = PlotState.Growing;
         Debug.Log($"{name}: planted a seed!");
@@ -96,7 +124,7 @@ public class FarmPlot : MonoBehaviour
         }
 
         // Start growth timer
-        StartCoroutine(GrowCrop());
+        //StartCoroutine(GrowCrop());
     }
 
     private IEnumerator GrowCrop()
@@ -127,6 +155,7 @@ public class FarmPlot : MonoBehaviour
             Destroy(currentCropPrefab);
         }
 
+        PhoneVibration.Instance.HeavyVibration();
         MoneyManager.Instance.AddMoney(harvestReward);
         Debug.Log($"Harvested at {name} and earned {harvestReward}");
     }
