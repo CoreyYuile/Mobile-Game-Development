@@ -32,6 +32,9 @@ public class MenuManager : MonoBehaviour
     void Start()
     {
         //mm = FindAnyObjectByType<MoneyManager>();
+
+        moneyText.text = $"MONEY: {MoneyManager.Instance.currentMoney}";
+
         if (MoneyManager.Instance != null)
         {
             MoneyManager.Instance.onMoneyChanged += UpdateMoneyDisplay;
