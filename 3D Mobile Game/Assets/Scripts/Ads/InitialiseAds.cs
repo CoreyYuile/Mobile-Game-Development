@@ -11,6 +11,7 @@ public class InitialiseAds : MonoBehaviour, IUnityAdsInitializationListener
 
     private void Awake()
     {
+        // Check what device is currently in use
 #if UNITY_IOS
 gameID = iosGameID;
 #elif UNITY_ANDROID

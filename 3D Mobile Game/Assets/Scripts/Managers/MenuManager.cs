@@ -41,6 +41,7 @@ public class MenuManager : MonoBehaviour
         }
     }
 
+    // Update the money text
     public void UpdateMoneyDisplay(int amount)
     {
         if (moneyText)
@@ -49,11 +50,13 @@ public class MenuManager : MonoBehaviour
         }
     }
 
+    // Set the purchase popup to active
     public void ShowBuyPlotPopup(FarmPlot plot, int cost)
     {
         pendingPlot = plot;
         if (buyPlotPopup && buyPlotPopupText)
         {
+            // Set text
             buyPlotPopupText.text = $"Buy plot for {cost}??";
             buyPlotPopup.SetActive(true);
         }
@@ -61,6 +64,7 @@ public class MenuManager : MonoBehaviour
 
     public void OnConfirmBuyPlot()
     {
+        // Call a check to see if the player can afford the plot, if they can, call to unlock plot
         if ((pendingPlot != null) && (MoneyManager.Instance.RemoveMoney(pendingPlot.unlockCost)))
         {
             pendingPlot.UnlockPlot();
@@ -70,6 +74,7 @@ public class MenuManager : MonoBehaviour
             Debug.Log("Not Enough Money!");
         }
 
+        // Deactivate popup
         buyPlotPopup.SetActive(false);
     }
 
@@ -82,6 +87,7 @@ public class MenuManager : MonoBehaviour
         }
     }
 
+    // Display a rewarded ad on the player's screen
     public void OnShowRewardedAd()
     {
         AdsManager.instance.rewardedAds.ShowRewardedAd();

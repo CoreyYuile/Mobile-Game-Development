@@ -12,7 +12,7 @@ public class WeatherData : MonoBehaviour
     [Header("Settings")]
 
     public float updateMinuteDelay = 10f;
-    public string OWAPIKey = "YOUR_API_KEY_HERE";
+    public string OWAPIKey;
 
     [Header("References")]
 
@@ -42,6 +42,8 @@ public class WeatherData : MonoBehaviour
         if (!isLocationInitialized) return;
 
         // Update the weather every hour (only have something like 1000 requests free per day)
+        // !! CHANGE THIS TO DATETIME STUFF !!
+        // Doesn't really work the intended way currently lmao.
         if (timer <= 0)
         {
             StartCoroutine(GetWeatherInfo());

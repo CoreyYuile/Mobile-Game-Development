@@ -11,6 +11,7 @@ public class InterstitialAds : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsSh
 
     private void Awake()
     {
+        // Check what device is currently in use
 #if UNITY_IOS
         adUnitID = iosAdUnitID;
 #elif UNITY_ANDROID

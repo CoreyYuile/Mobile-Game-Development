@@ -23,7 +23,7 @@ public class FarmPlot : MonoBehaviour
     public GameObject seedlingPrefab;
     public GameObject grownPrefab;
 
-    private GameObject currentCropPrefab;
+    public GameObject currentCropPrefab;
     public Transform cropAnchor;
 
     [Header("Plot Misc Settings")]
@@ -31,7 +31,10 @@ public class FarmPlot : MonoBehaviour
     public int unlockCost = 50;
     public int harvestReward = 20;
 
-    private DateTime plantedUTCTime;
+    public int gridX;
+    public int gridZ;
+
+    public DateTime plantedUTCTime;
 
     //[Header("References")]
 
@@ -48,9 +51,11 @@ public class FarmPlot : MonoBehaviour
     {
         if (state == PlotState.Growing)
         {
+            // Check if elapsed time has gone past growthDuration
             double elapsedSeconds = (DateTime.UtcNow - plantedUTCTime).TotalSeconds;
             if (elapsedSeconds >= growthDuration)
             {
+                // Change state and update visuals
                 state = PlotState.ReadyToHarvest;
                 Debug.Log($"{name}: crop is ready to harvest!");
 
@@ -99,8 +104,10 @@ public class FarmPlot : MonoBehaviour
         }
     }
 
+    // Handles seed planting
     private void PlantSeed()
     {
+        // Get the time that the seed was planted
         plantedUTCTime = DateTime.UtcNow;
 
         // Change state
@@ -127,39 +134,42 @@ public class FarmPlot : MonoBehaviour
         //StartCoroutine(GrowCrop());
     }
 
-    private IEnumerator GrowCrop()
-    {
-        yield return new WaitForSeconds(growthDuration);
+    //private IEnumerator GrowCrop()
+    //{
+    //    yield return new WaitForSeconds(growthDuration);
 
-        state = PlotState.ReadyToHarvest;
-        Debug.Log($"{name}: crop is ready to harvest!");
+    //    state = PlotState.ReadyToHarvest;
+    //    Debug.Log($"{name}: crop is ready to harvest!");
 
-        // Swap to grown crop prefab
-        if (currentCropPrefab)
-        {
-            Destroy(currentCropPrefab);
-        }
-        if (grownPrefab)
-        {
-            currentCropPrefab = Instantiate(grownPrefab, transform.position + Vector3.up * 0.5f, Quaternion.identity, transform);
-        }
-    }
+    //    // Swap to grown crop prefab
+    //    if (currentCropPrefab)
+    //    {
+    //        Destroy(currentCropPrefab);
+    //    }
+    //    if (grownPrefab)
+    //    {
+    //        currentCropPrefab = Instantiate(grownPrefab, transform.position + Vector3.up * 0.5f, Quaternion.identity, transform);
+    //    }
+    //}
 
+    // Handles the harvest
     private void HarvestCrop()
     {
-        Debug.Log($"{name}: harvested crop!");
 
+        // Change state back to empty, get rid of crop
         state = PlotState.Empty;
         if (currentCropPrefab)
         {
             Destroy(currentCropPrefab);
         }
 
+        // Give some sort of haptic feedback, reward player with money
         PhoneVibration.Instance.HeavyVibration();
         MoneyManager.Instance.AddMoney(harvestReward);
         Debug.Log($"Harvested at {name} and earned {harvestReward}");
     }
 
+    // Handle unlocking the selected plot
     public void UnlockPlot()
     {
         isOwned = true;
@@ -187,5 +197,46 @@ public class FarmPlot : MonoBehaviour
 
         // Destroy the old locked plot prefab
         Destroy(gameObject);
+    }
+
+    // !! THERE HAS TO BE A BETTER WAY TO DO THIS THERE HAS TO BE A BETTER WAY TO DO THIS THERE HAS TO BE A BETTER WAY TO DO THIS !!
+    public void SpawnSeed()
+    {
+        if (seedlingPrefab == null)
+        {
+            return;
+        }
+        if (cropAnchor == null)
+        {
+            cropAnchor = transform;
+        }
+        if (currentCropPrefab)
+        {
+            Destroy(currentCropPrefab);
+        }
+
+            GameObject crop = Instantiate(seedlingPrefab, cropAnchor.position, cropAnchor.rotation, cropAnchor);
+        //crop.transform.localScale = Vector3.one;
+        currentCropPrefab = crop;
+    }
+
+    public void SpawnCrop()
+    {
+        if (grownPrefab == null)
+        {
+            return;
+        }
+        if (cropAnchor == null)
+        {
+            cropAnchor = transform;
+        }
+        if (currentCropPrefab)
+        {
+            Destroy(currentCropPrefab);
+        }
+
+        GameObject crop = Instantiate(grownPrefab, cropAnchor.position, cropAnchor.rotation, cropAnchor);
+        //crop.transform.localScale = Vector3.one;
+        currentCropPrefab = crop;
     }
 }

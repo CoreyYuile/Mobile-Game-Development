@@ -6,6 +6,8 @@ using UnityEngine.Experimental.GlobalIllumination;
 public class CameraPan : MonoBehaviour
 {
 
+    // !! COMMENT THROUGH ALL OF THIS OTHERWISE I'LL FORGET SOMETHING LIKE A DUMB IDIOT LATER ON !!
+
     private Vector3 touch;
     public Camera cam;
     public float groundZ = 0;

@@ -35,18 +35,21 @@ public class PhoneVibration : MonoBehaviour
         
     }
 
+    // Play light haptic vibration
     public void LightVibration()
     {
         Debug.Log("Light vibration performed");
         HapticFeedback.LightFeedback();
     }
 
+    // Play medium haptic vibration
     public void MediumVibration()
     {
         Debug.Log("Medium vibration performed");
         HapticFeedback.MediumFeedback();
     }
 
+    // Play heavy haptic vibration
     public void HeavyVibration()
     {
         Debug.Log("Heavy vibration performed");

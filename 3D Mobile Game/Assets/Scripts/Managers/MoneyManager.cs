@@ -30,7 +30,11 @@ public class MoneyManager : MonoBehaviour
 
     void Start()
     {
-        currentMoney = startMoney;
+        // Set starting money for now
+        if (currentMoney == 0)
+        {
+            currentMoney = startMoney;
+        }
         onMoneyChanged?.Invoke(currentMoney);
     }
 
@@ -44,6 +48,7 @@ public class MoneyManager : MonoBehaviour
         return currentMoney >= amount;
     }
 
+    // Add money, self-explanatory
     public void AddMoney(int amount)
     {
         currentMoney += amount;
@@ -51,10 +56,14 @@ public class MoneyManager : MonoBehaviour
         Debug.Log($"+{amount} money added, total: {currentMoney}");
     }
 
+    // Remove money from player
     public bool RemoveMoney(int amount)
     {
+        // Check if the player has enough, otherwise they'll be in debt or something
         if (!HasEnough(amount))
+        {
             return false;
+        }
 
         currentMoney -= amount;
         onMoneyChanged?.Invoke(currentMoney);
