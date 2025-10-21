@@ -15,7 +15,7 @@ public class InterstitialAds : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsSh
 #if UNITY_IOS
         adUnitID = iosAdUnitID;
 #elif UNITY_ANDROID
-adUnitID = adroidAdUnitID;
+adUnitID = androidAdUnitID;
 #endif
     }
 
