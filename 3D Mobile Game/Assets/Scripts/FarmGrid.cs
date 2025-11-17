@@ -80,7 +80,7 @@ public class FarmGrid : MonoBehaviour
     public void RestorePlots(List<PlotSaveData> savedPlots)
     {
         // If there is nothing, don't go any further
-        if (savedPlots == null)
+        if (savedPlots == null || savedPlots.Count == 0)
         {
             return;
         }
@@ -88,61 +88,56 @@ public class FarmGrid : MonoBehaviour
         // Loop through every plot read from the save file
         foreach (var plotSave in savedPlots)
         {
-            FarmPlot plot = null;
-            // Loop through each plot, if plot grids match set plot to p
-            foreach (FarmPlot p in allPlots)
-            {
-                if (p.gridX == plotSave.xIndex && p.gridZ == plotSave.zIndex)
-                {
-                    plot = p;
-                    break;
-                }
-            }
+            // Find the matching plot by grid coordinates
+            FarmPlot plot = allPlots.Find(p =>
+                p.gridX == plotSave.xIndex &&
+                p.gridZ == plotSave.zIndex
+            );
 
             // If nothing is found for a specific plot, log it (ideally this should not happen anymore)
             if (plot == null)
             {
-                Debug.Log($"No plot data found for {plotSave.xIndex},{plotSave.zIndex}");
+                Debug.Log($"Plot not found for {plotSave.xIndex},{plotSave.zIndex}");
                 continue;
             }
 
-            // !! NEED TO WORK ON GETTING OWNED PLOTS TO SHOW UP INSTEAD OF LOCKED PLOTS !!
-            // I'm tired :(
-            plot.isOwned = plotSave.isOwned;
+            // Swap prefab if unlocked or not
+            bool shouldBeOwned = plotSave.isOwned;
 
-            // Convert the file's state variable back to an enum that can actually be used
-            // This is stupid, I hate it.
-            if (Enum.TryParse(plotSave.state, out FarmPlot.PlotState loadedState))
+            if (plot.isOwned != shouldBeOwned)
             {
-                plot.state = loadedState;
+                plot = SwapPrefab(plot, shouldBeOwned ? unlockedPlotPrefab : lockedPlotPrefab);
             }
-            else
+
+            plot.isOwned = shouldBeOwned;
+
+            // ---------- RESTORE PLOT STATE ----------
+            if (!Enum.TryParse(plotSave.state, out FarmPlot.PlotState loadedState))
             {
-                plot.state = FarmPlot.PlotState.Empty;
+                loadedState = FarmPlot.PlotState.Empty;
             }
+
+            plot.state = loadedState;
 
             // Check for if the plot was originally growing something before the player left
             if (plotSave.plantedTimeTicks > 0)
             {
                 // Convert back to UTC DateTime
-                DateTime plantedUtc = new DateTime(plotSave.plantedTimeTicks, DateTimeKind.Utc);
-                plot.plantedUTCTime = plantedUtc;
-
+                plot.plantedUTCTime = new DateTime(plotSave.plantedTimeTicks, DateTimeKind.Utc);
                 // Calculate how long its been in seconds since the crop was planted
-                double elapsed = (DateTime.UtcNow - plantedUtc).TotalSeconds;
+                double elapsed = (DateTime.UtcNow - plot.plantedUTCTime).TotalSeconds;
 
                 // If its been growing for longer than growthDuration, then state needs to be changed
                 if (elapsed >= plot.growthDuration)
                 {
+                    // Crop finished growing while player was away
                     plot.state = FarmPlot.PlotState.ReadyToHarvest;
-                    // !! THIS FEELS MESSY :(
                     plot.SpawnCrop();
                 }
                 else
                 {
                     // Still growing, set state to reflect this
                     plot.state = FarmPlot.PlotState.Growing;
-                    // !! THIS FEELS MESSY :(
                     plot.SpawnSeed();
                 }
             }
@@ -151,7 +146,6 @@ public class FarmGrid : MonoBehaviour
                 // Nothing was growing, plot should be empty
                 if (plot.state == FarmPlot.PlotState.Empty)
                 {
-                    // Get rid of any crops or seeds sat there (as they shouldn't be there!)
                     if (plot.currentCropPrefab != null)
                     {
                         Destroy(plot.currentCropPrefab);
@@ -166,7 +160,32 @@ public class FarmGrid : MonoBehaviour
             }
         }
 
-        // I'm gonna lose my damn mind I should've just kept to PlayerPrefs for the time being BUT IT WORKS YAY!!
         Debug.Log("Plots restored from save.");
+    }
+
+
+    public FarmPlot SwapPrefab(FarmPlot oldPlot, GameObject newPrefab)
+    {
+        GameObject newObj = Instantiate(
+            newPrefab,
+            oldPlot.transform.position,
+            oldPlot.transform.rotation,
+            oldPlot.transform.parent
+        );
+
+        // Get new script
+        FarmPlot newPlot = newObj.GetComponent<FarmPlot>();
+
+        // Copy grid coordinates
+        newPlot.gridX = oldPlot.gridX;
+        newPlot.gridZ = oldPlot.gridZ;
+
+        // Replace in list
+        int index = allPlots.IndexOf(oldPlot);
+        allPlots[index] = newPlot;
+
+        Destroy(oldPlot.gameObject);
+
+        return newPlot;
     }
 }

@@ -86,6 +86,7 @@ public class WeatherData : MonoBehaviour
         {
             downloadHandler = new DownloadHandlerBuffer()
         };
+        www.SetRequestHeader("User-Agent", "Unity3D");
 
         yield return www.SendWebRequest();
 

@@ -43,6 +43,7 @@ public class SaveManager : MonoBehaviour
 
         // Grab current money from the moneymanager
         data.playerMoney = MoneyManager.Instance.currentMoney;
+        data.playerNetMoney = MoneyManager.Instance.netMoney;
 
         // Collect all plot data
         foreach (var plot in FarmGrid.Instance.allPlots)
@@ -89,6 +90,8 @@ public class SaveManager : MonoBehaviour
         MoneyManager.Instance.currentMoney = data.playerMoney;
         MenuManager.Instance.UpdateMoneyDisplay(MoneyManager.Instance.currentMoney);
 
+        MoneyManager.Instance.netMoney = data.playerNetMoney;
+
         // call the FarmGrid to overwrite the plots with the saved data (THIS IS WHERE THE MAIN LOADING IS)
         FarmGrid.Instance.RestorePlots(data.plots);
     }
@@ -131,6 +134,7 @@ public class SaveManager : MonoBehaviour
 public class SaveData
 {
     public int playerMoney;
+    public int playerNetMoney;
     public List<PlotSaveData> plots = new List<PlotSaveData>();
 }
 
