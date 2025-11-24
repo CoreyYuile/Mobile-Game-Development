@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Experimental.GlobalIllumination;
 
 public class CameraPan : MonoBehaviour
@@ -23,6 +24,11 @@ public class CameraPan : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Ignore UI touches
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
         if (Input.GetMouseButtonDown(0))
         {
             touch = GetWorldPosition(groundZ);

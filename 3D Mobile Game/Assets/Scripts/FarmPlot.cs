@@ -167,6 +167,8 @@ public class FarmPlot : MonoBehaviour
         PhoneVibration.Instance.HeavyVibration();
         MoneyManager.Instance.AddMoney(harvestReward);
         Debug.Log($"Harvested at {name} and earned {harvestReward}");
+
+        Leaderboard.Instance.Submit(PlayerPrefs.GetString("PlayerName"), MoneyManager.Instance.netMoney);
     }
 
     // Handle unlocking the selected plot

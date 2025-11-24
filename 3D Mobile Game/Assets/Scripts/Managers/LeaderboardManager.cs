@@ -5,13 +5,15 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 using Dan.Main;
-using System.Net.Configuration;
+using System.Net;
 using Dan.Demo;
 using Dan.Models;
 using System;
 
 public class Leaderboard : MonoBehaviour
 {
+    public static Leaderboard Instance { get; private set; }
+
     [Header("Leaderboard Essentials:")]
     [SerializeField] private Transform _entryDisplayParent;
     [SerializeField] private EntryDisplay _entryDisplayPrefab;
@@ -27,7 +29,8 @@ public class Leaderboard : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _personalEntryText;
     [SerializeField] private TextMeshProUGUI PlayerNameInputPlaceholder, playerNameInputText;
 
-    private string publicKey = "e19cf49f90e319c843b22523e61112dd8d120753ee8177c26c0d85e1218c132e";
+    private string publicKey = "e523bc06ccdeea6c772ad9ca7033cadb45c91a7352a61808730afeefa5507b90";
+    private string privateKey = "10001580531a2eb3d2ad690b8eec8a96b091b4004b5fca6a2e0e0d7a9767d6ef818e1deef630b0c34943e9d45f5a7663086d211d197e1faf06db125a5a12c53d229cfbc68f42c07944d349fa24846f065667f1199c6eaf5b0d17813c81ae053ab23da14b35da8a83af55ab16229bd43ebdf62e18d323eea1fd5a0b2a460a47ae";
 
     private Coroutine _personalEntryMoveCoroutine;
 
@@ -57,7 +60,7 @@ public class Leaderboard : MonoBehaviour
         _pageInput.image.color = Color.white;
         _entriesToTakeInput.image.color = Color.white;
 
-        Leaderboards.Gravimatic.GetEntries(searchQuery, OnLeaderboardLoaded, ErrorCallback);
+        Leaderboards.Mobile.GetEntries(searchQuery, OnLeaderboardLoaded, ErrorCallback);
         ToggleLoadingPanel(true);
     }
 
@@ -145,11 +148,11 @@ public class Leaderboard : MonoBehaviour
 
     private IEnumerator Start()
     {
-        if (SceneManager.GetActiveScene().name == "CYU_MainMenu")
-        {
-            InitializeComponents();
-            Load();
-        }
+
+        Instance = this;
+        InitializeComponents();
+        Load();
+        
         Debug.Log(PlayerPrefs.GetString("PlayerName"));
         //PlayerPrefs.DeleteKey("PlayerName");
         if (PlayerPrefs.GetString("PlayerName") == null)
@@ -162,12 +165,12 @@ public class Leaderboard : MonoBehaviour
 
     public void Submit(string playerUsername, int score)
     {
-        Leaderboards.Gravimatic.UploadNewEntry(playerUsername, score, null, ErrorCallback);
+        Leaderboards.Mobile.UploadNewEntry(playerUsername, score, null, ErrorCallback);
     }
 
     public void DeleteEntry()
     {
-        Leaderboards.Gravimatic.DeleteEntry(Callback, ErrorCallback);
+        Leaderboards.Mobile.DeleteEntry(Callback, ErrorCallback);
     }
 
     public void ResetPlayer()
@@ -187,7 +190,7 @@ public class Leaderboard : MonoBehaviour
 
     public void GetPersonalEntry()
     {
-        Leaderboards.Gravimatic.GetPersonalEntry(OnPersonalEntryLoaded, ErrorCallback);
+        Leaderboards.Mobile.GetPersonalEntry(OnPersonalEntryLoaded, ErrorCallback);
     }
 
     private void OnPersonalEntryLoaded(Entry entry)
