@@ -61,6 +61,7 @@ public class MoneyManager : MonoBehaviour
         onNetMoneyChanged?.Invoke(netMoney);
 
         Debug.Log($"+{amount} money added, total: {currentMoney}, net worth: {netMoney}");
+        Leaderboard.Instance.Submit(PlayerPrefs.GetString("PlayerName"), netMoney);
     }
 
     // Remove money from player

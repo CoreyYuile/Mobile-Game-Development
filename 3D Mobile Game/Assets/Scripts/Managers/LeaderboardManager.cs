@@ -146,10 +146,18 @@ public class Leaderboard : MonoBehaviour
         _entriesToTakeInput.placeholder.GetComponent<TextMeshProUGUI>().text = _defaultEntriesToTake.ToString();
     }
 
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
+
     private IEnumerator Start()
     {
-
-        Instance = this;
         InitializeComponents();
         Load();
         
@@ -178,7 +186,6 @@ public class Leaderboard : MonoBehaviour
         LeaderboardCreator.ResetPlayer();
         GenerateRandomPlayerName();
         PlayerNameInputPlaceholder.text = PlayerPrefs.GetString("PlayerName");
-        PlayerPrefs.SetInt("BestScore", 0);
     }
 
     public void ChangePlayerName()
@@ -202,7 +209,9 @@ public class Leaderboard : MonoBehaviour
     private void Callback(bool success)
     {
         if (success)
+        {
             Load();
+        }
     }
 
     private void ErrorCallback(string error)

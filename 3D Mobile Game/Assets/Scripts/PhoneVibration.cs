@@ -23,18 +23,6 @@ public class PhoneVibration : MonoBehaviour
         Instance = this;
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     // Play light haptic vibration
     public void LightVibration()
     {
@@ -54,6 +42,11 @@ public class PhoneVibration : MonoBehaviour
     {
         Debug.Log("Heavy vibration performed");
         HapticFeedback.HeavyFeedback();
+    }
+
+    public void DefaultVibration()
+    {
+        Debug.Log("Defualt vibration performed");
         Handheld.Vibrate();
     }
 }

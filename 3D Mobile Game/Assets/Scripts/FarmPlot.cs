@@ -164,11 +164,9 @@ public class FarmPlot : MonoBehaviour
         }
 
         // Give some sort of haptic feedback, reward player with money
-        PhoneVibration.Instance.HeavyVibration();
+        PhoneVibration.Instance.DefaultVibration();
         MoneyManager.Instance.AddMoney(harvestReward);
         Debug.Log($"Harvested at {name} and earned {harvestReward}");
-
-        Leaderboard.Instance.Submit(PlayerPrefs.GetString("PlayerName"), MoneyManager.Instance.netMoney);
     }
 
     // Handle unlocking the selected plot
