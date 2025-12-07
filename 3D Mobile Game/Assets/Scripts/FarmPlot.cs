@@ -153,7 +153,7 @@ public class FarmPlot : MonoBehaviour
     //}
 
     // Handles the harvest
-    private void HarvestCrop()
+    public void HarvestCrop()
     {
 
         // Change state back to empty, get rid of crop

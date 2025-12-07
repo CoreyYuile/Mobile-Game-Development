@@ -4,20 +4,46 @@ using UnityEngine.EventSystems;
 public class TapManager : MonoBehaviour
 {
 
-    [SerializeField] private Camera mainCamera;
+    public static TapManager Instance {  get; private set; }
+
+    [Header("Tap Settings")]
+
     [SerializeField] private float tapThreshold = 15f;
 
     private Vector2 touchStartPos;
     private Vector2 touchEndPos;
     private bool isTapping = false;
 
+    [Header("Shake Settings")]
+
+    [SerializeField] private float shakeThreshold = 2.5f;
+    [SerializeField] private float shakeCooldown = 1.0f;
+
+    private float lastTimeShaked;
+
+    [Header("References")]
+
+    [SerializeField] private Camera mainCamera;
+
     void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
         if (mainCamera == null)
             mainCamera = Camera.main;
     }
 
     void Update()
+    {
+        DetectTap();
+        DetectShake();
+    }
+
+    private void DetectTap()
     {
         // Check if only one finger is held on the screen
         if (Input.touchCount == 1)
@@ -58,6 +84,33 @@ public class TapManager : MonoBehaviour
                     }
                     isTapping = false;
                     break;
+            }
+        }
+    }
+
+    private void DetectShake()
+    {
+        Vector3 acceleration = Input.acceleration;
+
+        float magnitude = acceleration.magnitude;
+
+        if (magnitude > shakeThreshold && Time.time > (shakeThreshold + shakeCooldown))
+        {
+            Debug.Log("Shake Detected");
+            shakeCooldown = Time.time;
+            AutoHarvest();
+        }
+    }
+
+    private void AutoHarvest()
+    {
+        FarmPlot[] plots = FindObjectsOfType<FarmPlot>();
+
+        foreach (var plot in plots)
+        {
+            if (plot.state == FarmPlot.PlotState.ReadyToHarvest)
+            {
+                plot.HarvestCrop();
             }
         }
     }
