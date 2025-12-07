@@ -8,6 +8,11 @@ public class MenuManager : MonoBehaviour
 
     public static MenuManager Instance { get; private set; }
 
+    [Header("Crop UI Settings")]
+
+    public CropData[] availableCrops;
+    private FarmPlot selectedPlot;
+
     [Header("UI Text References")]
 
     public TextMeshProUGUI moneyText;
@@ -16,6 +21,7 @@ public class MenuManager : MonoBehaviour
     [Header("UI Menu GO References")]
 
     public GameObject buyPlotPopup;
+    public GameObject CropSelection;
 
     private FarmPlot pendingPlot;
 
@@ -91,5 +97,18 @@ public class MenuManager : MonoBehaviour
     public void OnShowRewardedAd()
     {
         AdsManager.instance.rewardedAds.ShowRewardedAd();
+    }
+
+    public void ShowCropSelection(FarmPlot plot)
+    {
+        selectedPlot = plot;
+        CropSelection.SetActive(true);
+    }
+
+    public void SelectCropFromMenu(CropData cropData)
+    {
+        selectedPlot.PlantSeed(cropData);
+        selectedPlot = null;
+        CropSelection.SetActive(false);
     }
 }

@@ -1,16 +1,17 @@
 using UnityEngine;
 
-public class CropData : MonoBehaviour
+[CreateAssetMenu]
+public class CropData : ScriptableObject
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public string cropName;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [Header("Timing")]
+    public float growthDuration = 5f;
+
+    [Header("Rewards")]
+    public int harvestReward = 20;
+
+    [Header("Prefabs")]
+    public GameObject seedlingPrefab;
+    public GameObject grownPrefab;
 }

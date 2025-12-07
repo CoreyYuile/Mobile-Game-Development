@@ -8,6 +8,8 @@ public class FarmPlot : MonoBehaviour
 
     public bool isOwned = false;
 
+    public CropData currentCrop;
+
     // Different states a plot can be in
     // (!! Could add isOwned as a state instead of bool?? !!)
     public enum PlotState
@@ -49,11 +51,11 @@ public class FarmPlot : MonoBehaviour
 
     private void Update()
     {
-        if (state == PlotState.Growing)
+        if (state == PlotState.Growing && currentCrop != null)
         {
             // Check if elapsed time has gone past growthDuration
             double elapsedSeconds = (DateTime.UtcNow - plantedUTCTime).TotalSeconds;
-            if (elapsedSeconds >= growthDuration)
+            if (elapsedSeconds >= currentCrop.growthDuration)
             {
                 // Change state and update visuals
                 state = PlotState.ReadyToHarvest;
@@ -66,7 +68,7 @@ public class FarmPlot : MonoBehaviour
                 }
                 if (grownPrefab)
                 {
-                    currentCropPrefab = Instantiate(grownPrefab, transform.position + Vector3.up * 0.5f, Quaternion.identity, transform);
+                    currentCropPrefab = Instantiate(currentCrop.grownPrefab, transform.position + Vector3.up * 0.5f, Quaternion.identity, transform);
                 }
             }
         }
@@ -89,7 +91,8 @@ public class FarmPlot : MonoBehaviour
         {
             // If empty, plant seed
             case PlotState.Empty:
-                PlantSeed();
+                //PlantSeed();
+                MenuManager.Instance.ShowCropSelection(this);
                 break;
 
             // If the seed is still growing, do nothing (for now)
@@ -105,8 +108,10 @@ public class FarmPlot : MonoBehaviour
     }
 
     // Handles seed planting
-    private void PlantSeed()
+    public void PlantSeed(CropData cropdata)
     {
+        currentCrop = cropdata;
+
         // Get the time that the seed was planted
         plantedUTCTime = DateTime.UtcNow;
 
@@ -123,7 +128,7 @@ public class FarmPlot : MonoBehaviour
                 cropAnchor = transform;
             }
 
-            GameObject crop = Instantiate(seedlingPrefab, cropAnchor.position, cropAnchor.rotation);
+            GameObject crop = Instantiate(cropdata.seedlingPrefab, cropAnchor.position, cropAnchor.rotation);
             crop.transform.SetParent(cropAnchor, true);
             crop.transform.localScale = Vector3.one;
 
@@ -155,6 +160,11 @@ public class FarmPlot : MonoBehaviour
     // Handles the harvest
     public void HarvestCrop()
     {
+        if (currentCrop == null)
+        {
+            Debug.Log("!! NO CROP DATA, DEFAULTING TO BASE SETTINGS !!");
+            return;
+        }
 
         // Change state back to empty, get rid of crop
         state = PlotState.Empty;
@@ -165,8 +175,10 @@ public class FarmPlot : MonoBehaviour
 
         // Give some sort of haptic feedback, reward player with money
         PhoneVibration.Instance.DefaultVibration();
-        MoneyManager.Instance.AddMoney(harvestReward);
+        MoneyManager.Instance.AddMoney(currentCrop.harvestReward);
         Debug.Log($"Harvested at {name} and earned {harvestReward}");
+
+        currentCrop = null;
     }
 
     // Handle unlocking the selected plot
