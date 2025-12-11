@@ -111,4 +111,9 @@ public class MenuManager : MonoBehaviour
         selectedPlot = null;
         CropSelection.SetActive(false);
     }
+
+    public void OnCropSelected(int cropIndex)
+    {
+        SelectCropFromMenu(availableCrops[cropIndex]);
+    }
 }

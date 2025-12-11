@@ -66,6 +66,14 @@ public class SaveManager : MonoBehaviour
             {
                 plotData.plantedTimeTicks = 0;
             }
+            if (plot.currentCrop != null)
+            {
+                plotData.crop = plot.currentCrop.cropName;
+            }
+            else
+            {
+                plotData.crop = "";
+            }
 
             // Add this to the SaveData
             data.plots.Add(plotData);
@@ -146,5 +154,6 @@ public class PlotSaveData
     public int zIndex;
     public bool isOwned;
     public string state;
+    public string crop;
     public long plantedTimeTicks;
 }

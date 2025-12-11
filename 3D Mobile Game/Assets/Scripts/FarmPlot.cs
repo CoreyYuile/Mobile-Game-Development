@@ -163,7 +163,19 @@ public class FarmPlot : MonoBehaviour
         if (currentCrop == null)
         {
             Debug.Log("!! NO CROP DATA, DEFAULTING TO BASE SETTINGS !!");
-            return;
+            // Change state back to empty, get rid of crop
+            state = PlotState.Empty;
+            if (currentCropPrefab)
+            {
+                Destroy(currentCropPrefab);
+            }
+
+            // Give some sort of haptic feedback, reward player with money
+            PhoneVibration.Instance.DefaultVibration();
+            MoneyManager.Instance.AddMoney(harvestReward);
+            Debug.Log($"Harvested at {name} and earned {harvestReward}");
+
+            currentCrop = null;
         }
 
         // Change state back to empty, get rid of crop
