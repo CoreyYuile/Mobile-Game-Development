@@ -177,20 +177,22 @@ public class FarmPlot : MonoBehaviour
 
             currentCrop = null;
         }
-
-        // Change state back to empty, get rid of crop
-        state = PlotState.Empty;
-        if (currentCropPrefab)
+        else
         {
-            Destroy(currentCropPrefab);
+            // Change state back to empty, get rid of crop
+            state = PlotState.Empty;
+            if (currentCropPrefab)
+            {
+                Destroy(currentCropPrefab);
+            }
+
+            // Give some sort of haptic feedback, reward player with money
+            PhoneVibration.Instance.DefaultVibration();
+            MoneyManager.Instance.AddMoney(currentCrop.harvestReward);
+            Debug.Log($"Harvested at {name} and earned {harvestReward}");
+
+            currentCrop = null;
         }
-
-        // Give some sort of haptic feedback, reward player with money
-        PhoneVibration.Instance.DefaultVibration();
-        MoneyManager.Instance.AddMoney(currentCrop.harvestReward);
-        Debug.Log($"Harvested at {name} and earned {harvestReward}");
-
-        currentCrop = null;
     }
 
     // Handle unlocking the selected plot
@@ -224,8 +226,10 @@ public class FarmPlot : MonoBehaviour
     }
 
     // !! THERE HAS TO BE A BETTER WAY TO DO THIS THERE HAS TO BE A BETTER WAY TO DO THIS THERE HAS TO BE A BETTER WAY TO DO THIS !!
-    public void SpawnSeed()
+    public void SpawnSeed(CropData cropData)
     {
+        currentCrop = cropData;
+
         if (seedlingPrefab == null)
         {
             return;
@@ -239,13 +243,18 @@ public class FarmPlot : MonoBehaviour
             Destroy(currentCropPrefab);
         }
 
-            GameObject crop = Instantiate(seedlingPrefab, cropAnchor.position, cropAnchor.rotation, cropAnchor);
-        //crop.transform.localScale = Vector3.one;
+        GameObject crop = Instantiate(cropData.seedlingPrefab, cropAnchor.position, cropAnchor.rotation);
+        crop.transform.SetParent(cropAnchor, true);
+        crop.transform.localScale = Vector3.one;
         currentCropPrefab = crop;
     }
 
-    public void SpawnCrop()
+    public void SpawnCrop(CropData cropData)
     {
+        //Debug.Log(cropData.name);
+
+        currentCrop = cropData;
+
         if (grownPrefab == null)
         {
             return;
@@ -259,7 +268,7 @@ public class FarmPlot : MonoBehaviour
             Destroy(currentCropPrefab);
         }
 
-        GameObject crop = Instantiate(grownPrefab, cropAnchor.position, cropAnchor.rotation, cropAnchor);
+        GameObject crop = Instantiate(cropData.grownPrefab, cropAnchor.position, cropAnchor.rotation, cropAnchor);
         //crop.transform.localScale = Vector3.one;
         currentCropPrefab = crop;
     }
