@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
 {
@@ -105,6 +106,20 @@ public class MenuManager : MonoBehaviour
         CropSelection.SetActive(true);
     }
 
+    public CropData GetCropID(CropData.CropIDs id)
+    {
+        foreach (var crop in availableCrops)
+        {
+            if (crop.cropID == id)
+            {
+                return crop;
+            }
+        }
+
+        return null;
+    }
+
+
     public void SelectCropFromMenu(CropData cropData)
     {
         selectedPlot.PlantSeed(cropData);
@@ -115,5 +130,10 @@ public class MenuManager : MonoBehaviour
     public void OnCropSelected(int cropIndex)
     {
         SelectCropFromMenu(availableCrops[cropIndex]);
+    }
+
+    public void ChangeAutoType(Toggle toggle)
+    {
+        TapManager.Instance.isHarvesting = toggle.isOn;
     }
 }

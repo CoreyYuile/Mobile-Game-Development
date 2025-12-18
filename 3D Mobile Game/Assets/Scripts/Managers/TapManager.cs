@@ -18,6 +18,7 @@ public class TapManager : MonoBehaviour
 
     [SerializeField] private float shakeThreshold = 2.5f;
     [SerializeField] private float shakeCooldown = 1.0f;
+    public bool isHarvesting = true;
 
     private float lastTimeShaked;
 
@@ -94,11 +95,18 @@ public class TapManager : MonoBehaviour
 
         float magnitude = acceleration.magnitude;
 
-        if (magnitude > shakeThreshold && Time.time > (shakeThreshold + shakeCooldown))
+        if (magnitude > shakeThreshold && Time.time > shakeCooldown)
         {
             Debug.Log("Shake Detected");
             shakeCooldown = Time.time;
-            AutoHarvest();
+            if (isHarvesting)
+            {
+                AutoHarvest();
+            }
+            else
+            {
+                AutoPlant();
+            }
         }
     }
 
@@ -111,6 +119,19 @@ public class TapManager : MonoBehaviour
             if (plot.state == FarmPlot.PlotState.ReadyToHarvest)
             {
                 plot.HarvestCrop();
+            }
+        }
+    }
+
+    private void AutoPlant()
+    {
+        FarmPlot[] plots = FindObjectsOfType<FarmPlot>();
+
+        foreach(var plot in plots)
+        {
+            if (plot.state == FarmPlot.PlotState.Empty && plot.isOwned == true)
+            {
+                plot.PlantSeed(MenuManager.Instance.availableCrops[0]);
             }
         }
     }

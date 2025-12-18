@@ -119,7 +119,9 @@ public class FarmGrid : MonoBehaviour
 
             plot.state = loadedState;
             Enum.TryParse(plotSave.crop, out CropData.CropIDs cropID);
-            
+            CropData cropData = MenuManager.Instance.GetCropID(cropID);
+
+
 
             // Check for if the plot was originally growing something before the player left
             if (plotSave.plantedTimeTicks > 0)
@@ -131,53 +133,53 @@ public class FarmGrid : MonoBehaviour
 
                 // !! FIX THIS TO USE CROPDATA GROWTH TIME !!
                 // If its been growing for longer than growthDuration, then state needs to be changed
-                if (elapsed >= plot.growthDuration)
+                if (elapsed >= /*plot.growthDuration*/ cropData.growthDuration)
                 {
                     // Crop finished growing while player was away
                     plot.state = FarmPlot.PlotState.ReadyToHarvest;
-                    switch (cropID)
-                    {
-                        case CropData.CropIDs.Tomato:
-                            plot.SpawnCrop(MenuManager.Instance.availableCrops[3]);
-                            break;
-                        case CropData.CropIDs.Potato:
-                            plot.SpawnCrop(MenuManager.Instance.availableCrops[1]);
-                            break;
-                        case CropData.CropIDs.Wheat:
-                            plot.SpawnCrop(MenuManager.Instance.availableCrops[4]);
-                            break;
-                        case CropData.CropIDs.Corn:
-                            plot.SpawnCrop(MenuManager.Instance.availableCrops[0]);
-                            break;
-                        case CropData.CropIDs.Pumpkin:
-                            plot.SpawnCrop(MenuManager.Instance.availableCrops[2]);
-                            break;
-                    }
-                    //plot.SpawnCrop();
+                    //switch (cropID)
+                    //{
+                    //    case CropData.CropIDs.Tomato:
+                    //        plot.SpawnCrop(MenuManager.Instance.availableCrops[3]);
+                    //        break;
+                    //    case CropData.CropIDs.Potato:
+                    //        plot.SpawnCrop(MenuManager.Instance.availableCrops[1]);
+                    //        break;
+                    //    case CropData.CropIDs.Wheat:
+                    //        plot.SpawnCrop(MenuManager.Instance.availableCrops[4]);
+                    //        break;
+                    //    case CropData.CropIDs.Corn:
+                    //        plot.SpawnCrop(MenuManager.Instance.availableCrops[0]);
+                    //        break;
+                    //    case CropData.CropIDs.Pumpkin:
+                    //        plot.SpawnCrop(MenuManager.Instance.availableCrops[2]);
+                    //        break;
+                    //}
+                    plot.SpawnCrop(cropData);
                 }
                 else
                 {
                     // Still growing, set state to reflect this
                     plot.state = FarmPlot.PlotState.Growing;
-                    switch (cropID)
-                    {
-                        case CropData.CropIDs.Tomato:
-                            plot.SpawnSeed(MenuManager.Instance.availableCrops[3]);
-                            break;
-                        case CropData.CropIDs.Potato:
-                            plot.SpawnSeed(MenuManager.Instance.availableCrops[1]);
-                            break;
-                        case CropData.CropIDs.Wheat:
-                            plot.SpawnSeed(MenuManager.Instance.availableCrops[4]);
-                            break;
-                        case CropData.CropIDs.Corn:
-                            plot.SpawnSeed(MenuManager.Instance.availableCrops[0]);
-                            break;
-                        case CropData.CropIDs.Pumpkin:
-                            plot.SpawnSeed(MenuManager.Instance.availableCrops[2]);
-                            break;
-                    }
-                    //plot.SpawnSeed();
+                    //switch (cropID)
+                    //{
+                    //    case CropData.CropIDs.Tomato:
+                    //        plot.SpawnSeed(MenuManager.Instance.availableCrops[3]);
+                    //        break;
+                    //    case CropData.CropIDs.Potato:
+                    //        plot.SpawnSeed(MenuManager.Instance.availableCrops[1]);
+                    //        break;
+                    //    case CropData.CropIDs.Wheat:
+                    //        plot.SpawnSeed(MenuManager.Instance.availableCrops[4]);
+                    //        break;
+                    //    case CropData.CropIDs.Corn:
+                    //        plot.SpawnSeed(MenuManager.Instance.availableCrops[0]);
+                    //        break;
+                    //    case CropData.CropIDs.Pumpkin:
+                    //        plot.SpawnSeed(MenuManager.Instance.availableCrops[2]);
+                    //        break;
+                    //}
+                    plot.SpawnSeed(cropData);
                 }
             }
             else
@@ -193,26 +195,26 @@ public class FarmGrid : MonoBehaviour
                 // Gotta account for if the player left the game with a crop ready to harvest
                 else if (plot.state == FarmPlot.PlotState.ReadyToHarvest)
                 {
-                    switch (cropID)
-                    {
-                        case CropData.CropIDs.Tomato:
-                            plot.SpawnCrop(MenuManager.Instance.availableCrops[3]);
-                            break;
-                        case CropData.CropIDs.Potato:
-                            plot.SpawnCrop(MenuManager.Instance.availableCrops[1]);
-                            break;
-                        case CropData.CropIDs.Wheat:
-                            plot.SpawnCrop(MenuManager.Instance.availableCrops[4]);
-                            break;
-                        case CropData.CropIDs.Corn:
-                            plot.SpawnCrop(MenuManager.Instance.availableCrops[0]);
-                            break;
-                        case CropData.CropIDs.Pumpkin:
-                            plot.SpawnCrop(MenuManager.Instance.availableCrops[2]);
-                            break;
-                    }
+                    //switch (cropID)
+                    //{
+                    //    case CropData.CropIDs.Tomato:
+                    //        plot.SpawnCrop(MenuManager.Instance.availableCrops[3]);
+                    //        break;
+                    //    case CropData.CropIDs.Potato:
+                    //        plot.SpawnCrop(MenuManager.Instance.availableCrops[1]);
+                    //        break;
+                    //    case CropData.CropIDs.Wheat:
+                    //        plot.SpawnCrop(MenuManager.Instance.availableCrops[4]);
+                    //        break;
+                    //    case CropData.CropIDs.Corn:
+                    //        plot.SpawnCrop(MenuManager.Instance.availableCrops[0]);
+                    //        break;
+                    //    case CropData.CropIDs.Pumpkin:
+                    //        plot.SpawnCrop(MenuManager.Instance.availableCrops[2]);
+                    //        break;
+                    //}
                     //// Spawn a grown crop that the player can harvest
-                    //plot.SpawnCrop();
+                    plot.SpawnCrop(cropData);
                 }
             }
         }
