@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public class WeatherData : MonoBehaviour
 {
+    public static WeatherData Instance { get; private set; }
 
     [Header("Settings")]
 
@@ -24,13 +25,31 @@ public class WeatherData : MonoBehaviour
     public float longitude;
     public string cityName;
     public string currentWeather;
+    public WeatherType currentWeatherType = WeatherType.clear;
 
     private string IPAddress;
     public float timer;
     private bool isLocationInitialized = false;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public enum WeatherType
+    {
+        clear,
+        cloudy,
+        rain
+    }
+
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
+
+        // Start is called once before the first execution of Update after the MonoBehaviour is created
+        void Start()
     {
         StartCoroutine(GetIP());
     }
@@ -125,7 +144,20 @@ public class WeatherData : MonoBehaviour
         var weather = JsonUtility.FromJson<WeatherInfo>(www.downloadHandler.text);
 
         // Get current weather from JSON
-        currentWeather = weather.weather[0].description;
+        currentWeather = weather.weather[0].main;
+
+        if (currentWeather == "Rain" || currentWeather == "Drizzle" || currentWeather == "Thunderstorm")
+        {
+            currentWeatherType = WeatherType.rain;
+        }
+        else if (currentWeather == "Clouds")
+        {
+            currentWeatherType = WeatherType.cloudy;
+        }
+        else
+        {
+            currentWeatherType = WeatherType.clear;
+        }
 
         // Update the text!!
         string display = $"{cityName}: {currentWeather}";

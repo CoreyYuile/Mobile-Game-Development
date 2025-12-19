@@ -55,7 +55,18 @@ public class FarmPlot : MonoBehaviour
         {
             // Check if elapsed time has gone past growthDuration
             double elapsedSeconds = (DateTime.UtcNow - plantedUTCTime).TotalSeconds;
-            if (elapsedSeconds >= currentCrop.growthDuration)
+
+            float growthMultiplier = 1.0f;
+
+            if (WeatherData.Instance.currentWeatherType == WeatherData.WeatherType.rain)
+            {
+                growthMultiplier = 0.5f;
+            }
+            else if (WeatherData.Instance.currentWeatherType == WeatherData.WeatherType.rain)
+            {
+                growthMultiplier = 1.25f;
+            }
+            if (elapsedSeconds >= (currentCrop.growthDuration * growthMultiplier))
             {
                 // Change state and update visuals
                 state = PlotState.ReadyToHarvest;
@@ -188,8 +199,16 @@ public class FarmPlot : MonoBehaviour
 
             // Give some sort of haptic feedback, reward player with money
             PhoneVibration.Instance.DefaultVibration();
-            MoneyManager.Instance.AddMoney(currentCrop.harvestReward);
-            Debug.Log($"Harvested at {name} and earned {harvestReward}");
+            if (WeatherData.Instance.currentWeatherType == WeatherData.WeatherType.rain)
+            {
+                MoneyManager.Instance.AddMoney(currentCrop.harvestReward * 2);
+                Debug.Log($"Harvested at {name} and earned {harvestReward * 2}");
+            }
+            else
+            {
+                MoneyManager.Instance.AddMoney(currentCrop.harvestReward);
+                Debug.Log($"Harvested at {name} and earned {harvestReward}");
+            }
 
             currentCrop = null;
         }
