@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using CandyCoded;
 using CandyCoded.HapticFeedback;
 
 public class PhoneVibration : MonoBehaviour

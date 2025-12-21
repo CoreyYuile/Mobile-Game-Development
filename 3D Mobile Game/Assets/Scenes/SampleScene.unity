@@ -7977,7 +7977,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 330585545}
   groundZ: 0
-  zoomOutMin: 40
+  zoomOutMin: 50
   zoomOutMax: 90
 --- !u!4 &1148440804
 Transform:
@@ -9919,6 +9919,7 @@ MonoBehaviour:
   longitude: 0
   cityName: 
   currentWeather: 
+  currentWeatherType: 0
   timer: 0
 --- !u!114 &1386649198
 MonoBehaviour:
