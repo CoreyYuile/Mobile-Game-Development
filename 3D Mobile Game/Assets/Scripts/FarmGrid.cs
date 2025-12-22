@@ -247,4 +247,21 @@ public class FarmGrid : MonoBehaviour
 
         return newPlot;
     }
+
+    // Returns how many plots are owned - saves storing this in .json instead
+    public int OwnedPlotCount()
+    {
+        int count = 0;
+        // Loop through all plots, check which ones are owned
+        foreach (var plot in allPlots)
+        {
+            if (plot.isOwned)
+            {
+                count++;
+            }
+        }
+        // Return the amount owned
+        return count;
+    }
+
 }

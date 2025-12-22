@@ -80,4 +80,14 @@ public class MoneyManager : MonoBehaviour
         Debug.Log($"Money spent: -{amount}, Total: {currentMoney}, NetWorth: {netMoney}");
         return true;
     }
+
+    // Calculates how much a farm plot will cost, should be exponential
+    public int NextPlotCost()
+    {
+        int owned = FarmGrid.Instance.OwnedPlotCount();
+
+        // !! MAYBE RAISE THE POWER TO INCREASE PRICE?? !!
+        return Mathf.RoundToInt(200 * Mathf.Pow(1.25f, owned));
+    }
+
 }

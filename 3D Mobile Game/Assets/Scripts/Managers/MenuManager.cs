@@ -61,12 +61,9 @@ public class MenuManager : MonoBehaviour
     public void ShowBuyPlotPopup(FarmPlot plot, int cost)
     {
         pendingPlot = plot;
-        if (buyPlotPopup && buyPlotPopupText)
-        {
-            // Set text
-            buyPlotPopupText.text = $"Buy plot for {cost}??";
-            buyPlotPopup.SetActive(true);
-        }
+        // Set text
+        buyPlotPopupText.text = $"Buy plot for {cost}??";
+        buyPlotPopup.SetActive(true);
     }
 
     public void OnConfirmBuyPlot()

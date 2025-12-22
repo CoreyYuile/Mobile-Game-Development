@@ -93,6 +93,7 @@ public class FarmPlot : MonoBehaviour
         if (!isOwned)
         {
             //UnlockPlot();
+            unlockCost = MoneyManager.Instance.NextPlotCost();
             MenuManager.Instance.ShowBuyPlotPopup(this, unlockCost);
             return;
         }
