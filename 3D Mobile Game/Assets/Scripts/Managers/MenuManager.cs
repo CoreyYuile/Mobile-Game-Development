@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
@@ -19,6 +21,7 @@ public class MenuManager : MonoBehaviour
 
     public TextMeshProUGUI moneyText;
     public TextMeshProUGUI buyPlotPopupText;
+    public TMP_Text inputtext;
 
     [Header("UI Menu GO References")]
 
@@ -41,10 +44,9 @@ public class MenuManager : MonoBehaviour
     {
         //mm = FindAnyObjectByType<MoneyManager>();
 
-        moneyText.text = $"MONEY: {MoneyManager.Instance.currentMoney}";
-
         if (MoneyManager.Instance != null)
         {
+            moneyText.text = $"MONEY: {MoneyManager.Instance.currentMoney}";
             MoneyManager.Instance.onMoneyChanged += UpdateMoneyDisplay;
         }
     }
@@ -134,5 +136,26 @@ public class MenuManager : MonoBehaviour
     public void ChangeAutoType(Toggle toggle)
     {
         TapManager.Instance.isHarvesting = toggle.isOn;
+    }
+
+    public void ActivateKeyboard()
+    {
+        TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
+    }
+
+    //public void OnGUI()
+    //{
+    //    string stringToEdit = inputtext.text;
+    //    stringToEdit = GUI.TextField(new Rect(10, 10, 200, 30), stringToEdit, 30);
+
+    //    if (GUI.Button(new Rect(10, 50, 200, 100), "Default"))
+    //    {
+    //        TouchScreenKeyboard keyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
+    //    }
+    //}
+
+    public void PlayGame()
+    {
+        SceneManager.LoadScene("Farm");
     }
 }
