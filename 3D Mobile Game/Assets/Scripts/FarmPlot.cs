@@ -103,8 +103,8 @@ public class FarmPlot : MonoBehaviour
         {
             // If empty, plant seed
             case PlotState.Empty:
-                //PlantSeed();
-                MenuManager.Instance.ShowCropSelection(this);
+                PlantSeed(MenuManager.Instance.selectedCrop);
+                //MenuManager.Instance.ShowCropSelection(this);
                 break;
 
             // If the seed is still growing, do nothing (for now)

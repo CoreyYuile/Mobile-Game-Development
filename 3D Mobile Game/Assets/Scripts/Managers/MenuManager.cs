@@ -13,6 +13,7 @@ public class MenuManager : MonoBehaviour
 
     public CropData[] availableCrops;
     private FarmPlot selectedPlot;
+    public CropData selectedCrop;
 
     [Header("UI Text References")]
 
@@ -124,9 +125,10 @@ public class MenuManager : MonoBehaviour
         CropSelection.SetActive(false);
     }
 
-    public void OnCropSelected(int cropIndex)
+    public void OnCropSelected(CropData cropData)
     {
-        SelectCropFromMenu(availableCrops[cropIndex]);
+        //SelectCropFromMenu(availableCrops[cropIndex]);
+        selectedCrop = cropData;
     }
 
     public void ChangeAutoType(Toggle toggle)
