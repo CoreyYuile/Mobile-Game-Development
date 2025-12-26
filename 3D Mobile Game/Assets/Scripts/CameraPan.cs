@@ -62,6 +62,12 @@ public class CameraPan : MonoBehaviour
         // Handle panning the camera
         else if (Input.GetMouseButton(0))
         {
+            Touch fingertouch = Input.GetTouch(0);
+            // Ignore UI touches
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(fingertouch.fingerId))
+            {
+                return;
+            }
             // ughhhhhhhhhhh this is kinda stupid
             // Get the difference in position, fetch camforward and camright because the camera is angled
             //Vector3 direction = touch - GetWorldPosition(groundZ);
@@ -85,7 +91,6 @@ public class CameraPan : MonoBehaviour
             
             //Camera.main.transform.position += direction;
         }
-        Zoom(Input.GetAxis("Mouse ScrollWheel") * 5);
     }
 
     // Zoom camera

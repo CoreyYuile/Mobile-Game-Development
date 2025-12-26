@@ -52,8 +52,9 @@ public class TapManager : MonoBehaviour
             Touch touch = Input.GetTouch(0);
 
             // Ignore UI touches
-            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(touch.fingerId))
             {
+                isTapping = false ;
                 return;
             }
 

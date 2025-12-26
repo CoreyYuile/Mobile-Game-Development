@@ -6,6 +6,7 @@ public class AdsManager : MonoBehaviour
     public InitialiseAds initialiseAds;
     public InterstitialAds interstitialAds;
     public RewardedAds rewardedAds;
+    public BannerAds bannerAds;
 
     public static AdsManager instance { get; private set; }
 
@@ -24,12 +25,13 @@ public class AdsManager : MonoBehaviour
         // Load ads ahead of time
         interstitialAds.LoadInterstitialAd();
         rewardedAds.LoadRewardedAd();
+        bannerAds.LoadBannerAd();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        bannerAds.ShowBannerAd();
     }
 
     // Update is called once per frame

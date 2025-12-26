@@ -46,7 +46,7 @@ public class MenuManager : MonoBehaviour
 
         if (MoneyManager.Instance != null)
         {
-            moneyText.text = $"MONEY: {MoneyManager.Instance.currentMoney}";
+            moneyText.text = $": {MoneyManager.Instance.currentMoney}";
             MoneyManager.Instance.onMoneyChanged += UpdateMoneyDisplay;
         }
     }
@@ -56,7 +56,7 @@ public class MenuManager : MonoBehaviour
     {
         if (moneyText)
         {
-            moneyText.text = $"MONEY: {amount}";
+            moneyText.text = $": {amount}";
         }
     }
 
