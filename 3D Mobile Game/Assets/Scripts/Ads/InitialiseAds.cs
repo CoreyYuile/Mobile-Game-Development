@@ -17,7 +17,7 @@ gameID = iosGameID;
 #elif UNITY_ANDROID
 gameID = androidGameID;
 #elif UNITY_EDITOR
-gameID = iosGameID;
+gameID = androidGameID;
 #endif
 
         if (!Advertisement.isInitialized && Advertisement.isSupported)
@@ -41,7 +41,7 @@ gameID = iosGameID;
     public void OnInitializationComplete()
     {
         Debug.Log("Ads initialised!");
-        //AdsManager.instance.bannerAds.ShowBannerAd();
+        AdsManager.instance.OnAdsInitialised();
     }
 
     public void OnInitializationFailed(UnityAdsInitializationError error, string message)

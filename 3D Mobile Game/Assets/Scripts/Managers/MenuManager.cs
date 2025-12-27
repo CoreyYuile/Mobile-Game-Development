@@ -21,7 +21,7 @@ public class MenuManager : MonoBehaviour
 
     public TextMeshProUGUI moneyText;
     public TextMeshProUGUI buyPlotPopupText;
-    public TMP_Text inputtext;
+    //public TMP_Text inputText;
 
     [Header("UI Menu GO References")]
 
@@ -54,10 +54,7 @@ public class MenuManager : MonoBehaviour
     // Update the money text
     public void UpdateMoneyDisplay(int amount)
     {
-        if (moneyText)
-        {
-            moneyText.text = $": {amount}";
-        }
+        moneyText.text = $": {amount}";
     }
 
     // Set the purchase popup to active
@@ -145,7 +142,7 @@ public class MenuManager : MonoBehaviour
 
     //public void OnGUI()
     //{
-    //    string stringToEdit = inputtext.text;
+    //    string stringToEdit = inputText.text;
     //    stringToEdit = GUI.TextField(new Rect(10, 10, 200, 30), stringToEdit, 30);
 
     //    if (GUI.Button(new Rect(10, 50, 200, 100), "Default"))

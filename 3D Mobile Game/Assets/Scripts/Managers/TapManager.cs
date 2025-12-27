@@ -34,8 +34,6 @@ public class TapManager : MonoBehaviour
             return;
         }
         Instance = this;
-        if (mainCamera == null)
-            mainCamera = Camera.main;
     }
 
     void Update()

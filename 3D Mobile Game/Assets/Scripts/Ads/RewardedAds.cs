@@ -39,7 +39,6 @@ adUnitID = androidAdUnitID;
     {
         // Show the ad, load next one so it is ready ASAP.
         Advertisement.Show(adUnitID, this);
-        LoadRewardedAd();
     }
 
     public void OnUnityAdsAdLoaded(string placementId)
@@ -75,6 +74,8 @@ adUnitID = androidAdUnitID;
             // Ad is complete, give the player reward
             Debug.Log("Rewarded ad completed");
             MoneyManager.Instance.AddMoney(100);
+
+            LoadRewardedAd();
         }
     }
 }

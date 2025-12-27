@@ -16,5 +16,5 @@ MonoBehaviour:
   cropName: Corn
   growthDuration: 45
   harvestReward: 130
-  seedlingPrefab: {fileID: 5657444399373232849, guid: 8be2376c2debb094aacecdfc7bd04af8, type: 3}
+  seedlingPrefab: {fileID: 5657444399373232849, guid: c8505c13384f9774c9c6500e6a9db280, type: 3}
   grownPrefab: {fileID: 5657444399373232849, guid: e4d21f8fd244b2745b8d722f56660e31, type: 3}

@@ -23,20 +23,29 @@ public class AdsManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         // Load ads ahead of time
-        interstitialAds.LoadInterstitialAd();
-        rewardedAds.LoadRewardedAd();
-        bannerAds.LoadBannerAd();
+        //interstitialAds.LoadInterstitialAd();
+        //rewardedAds.LoadRewardedAd();
+        //bannerAds.LoadBannerAd();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        bannerAds.ShowBannerAd();
+
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void OnAdsInitialised()
+    {
+        interstitialAds.LoadInterstitialAd();
+        rewardedAds.LoadRewardedAd();
+        bannerAds.LoadBannerAd();
+
+        bannerAds.ShowBannerAd();
     }
 }

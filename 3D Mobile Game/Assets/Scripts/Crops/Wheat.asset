@@ -16,5 +16,5 @@ MonoBehaviour:
   cropName: Wheat
   growthDuration: 13
   harvestReward: 30
-  seedlingPrefab: {fileID: 5657444399373232849, guid: 8be2376c2debb094aacecdfc7bd04af8, type: 3}
+  seedlingPrefab: {fileID: 5657444399373232849, guid: 618cb9ebd2e082e4fa81752b96bda0d9, type: 3}
   grownPrefab: {fileID: 5657444399373232849, guid: fc3dcfa3f05ad8048bee57fcac16a9d0, type: 3}

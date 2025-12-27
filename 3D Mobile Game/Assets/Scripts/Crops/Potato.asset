@@ -16,5 +16,5 @@ MonoBehaviour:
   cropName: Potato
   growthDuration: 25
   harvestReward: 60
-  seedlingPrefab: {fileID: 5657444399373232849, guid: 8be2376c2debb094aacecdfc7bd04af8, type: 3}
+  seedlingPrefab: {fileID: 5657444399373232849, guid: ed9b383f64df90443ba5b29cb5a8db51, type: 3}
   grownPrefab: {fileID: 5657444399373232849, guid: 822a1de5d0ed90341a3ddaba5c9621ea, type: 3}
