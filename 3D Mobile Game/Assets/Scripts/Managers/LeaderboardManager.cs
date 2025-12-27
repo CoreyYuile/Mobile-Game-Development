@@ -96,8 +96,7 @@ public class Leaderboard : MonoBehaviour
     {
         if (_personalEntryMoveCoroutine != null)
             StopCoroutine(_personalEntryMoveCoroutine);
-        _personalEntryMoveCoroutine = StartCoroutine(MoveMenuCoroutine(_personalEntryPanel,
-            new Vector2(xPos, _personalEntryPanel.anchoredPosition.y)));
+        _personalEntryMoveCoroutine = StartCoroutine(MoveMenuCoroutine(_personalEntryPanel, new Vector2(_personalEntryPanel.anchoredPosition.x, xPos)));
     }
 
     private IEnumerator MoveMenuCoroutine(RectTransform rectTransform, Vector2 anchoredPosition)

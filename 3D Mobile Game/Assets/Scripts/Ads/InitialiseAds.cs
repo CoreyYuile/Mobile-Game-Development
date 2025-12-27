@@ -41,6 +41,7 @@ gameID = iosGameID;
     public void OnInitializationComplete()
     {
         Debug.Log("Ads initialised!");
+        //AdsManager.instance.bannerAds.ShowBannerAd();
     }
 
     public void OnInitializationFailed(UnityAdsInitializationError error, string message)

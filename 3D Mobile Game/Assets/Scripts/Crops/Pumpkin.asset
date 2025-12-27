@@ -16,5 +16,5 @@ MonoBehaviour:
   cropName: Pumpkin
   growthDuration: 120
   harvestReward: 290
-  seedlingPrefab: {fileID: 5657444399373232849, guid: 8be2376c2debb094aacecdfc7bd04af8, type: 3}
+  seedlingPrefab: {fileID: 38335279662140195, guid: 34d3f526198dae440bb2ce6005d86055, type: 3}
   grownPrefab: {fileID: 5657444399373232849, guid: 35b6f2d56ddd3fe4abc4002b4436c3f1, type: 3}

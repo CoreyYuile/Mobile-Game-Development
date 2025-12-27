@@ -17,12 +17,11 @@ public class BannerAds : MonoBehaviour
 #elif UNITY_ANDROID
         adUnitID = androidAdUnitID;
 #endif
-
-        Advertisement.Banner.SetPosition(BannerPosition.BOTTOM_CENTER);
     }
 
     public void LoadBannerAd()
     {
+        Advertisement.Banner.SetPosition(BannerPosition.BOTTOM_CENTER);
         BannerLoadOptions options = new BannerLoadOptions
         {
             loadCallback = BannerLoaded,
@@ -34,6 +33,7 @@ public class BannerAds : MonoBehaviour
 
     public void ShowBannerAd()
     {
+
         BannerOptions options = new BannerOptions
         {
             showCallback = BannerShown,
