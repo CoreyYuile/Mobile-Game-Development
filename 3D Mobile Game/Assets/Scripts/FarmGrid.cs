@@ -59,7 +59,7 @@ public class FarmGrid : MonoBehaviour
 
                 // Instantiate plot, name it
                 GameObject cell = Instantiate(prefabToUse, position, Quaternion.identity, transform);
-                cell.name = $"{(isCenterPlot ? "Unlocked" : "Locked")}_Cell_{x}_{z}";
+                cell.name = $"Cell_{x}_{z}";
 
                 // Store to the list of all plots
                 FarmPlot plot = cell.GetComponent<FarmPlot>();
@@ -102,14 +102,14 @@ public class FarmGrid : MonoBehaviour
             }
 
             // Swap prefab if unlocked or not
-            bool shouldBeOwned = plotSave.isOwned;
+            //bool shouldBeOwned = plotSave.isOwned;
 
-            if (plot.isOwned != shouldBeOwned)
+            if (plot.isOwned != plotSave.isOwned)
             {
-                plot = SwapPrefab(plot, shouldBeOwned ? unlockedPlotPrefab : lockedPlotPrefab);
+                plot = SwapPrefab(plot, plotSave.isOwned ? unlockedPlotPrefab : lockedPlotPrefab);
             }
 
-            plot.isOwned = shouldBeOwned;
+            plot.isOwned = plotSave.isOwned;
 
             // ---------- RESTORE PLOT STATE ----------
             if (!Enum.TryParse(plotSave.state, out FarmPlot.PlotState loadedState))
@@ -225,12 +225,7 @@ public class FarmGrid : MonoBehaviour
 
     public FarmPlot SwapPrefab(FarmPlot oldPlot, GameObject newPrefab)
     {
-        GameObject newObj = Instantiate(
-            newPrefab,
-            oldPlot.transform.position,
-            oldPlot.transform.rotation,
-            oldPlot.transform.parent
-        );
+        GameObject newObj = Instantiate(newPrefab, oldPlot.transform.position, oldPlot.transform.rotation, oldPlot.transform.parent);
 
         // Get new script
         FarmPlot newPlot = newObj.GetComponent<FarmPlot>();

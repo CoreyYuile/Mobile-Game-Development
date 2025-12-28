@@ -62,7 +62,7 @@ public class FarmPlot : MonoBehaviour
             {
                 growthMultiplier = 0.5f;
             }
-            else if (WeatherData.Instance.currentWeatherType == WeatherData.WeatherType.rain)
+            else if (WeatherData.Instance.currentWeatherType == WeatherData.WeatherType.cloudy)
             {
                 growthMultiplier = 1.25f;
             }
@@ -71,6 +71,8 @@ public class FarmPlot : MonoBehaviour
                 // Change state and update visuals
                 state = PlotState.ReadyToHarvest;
                 Debug.Log($"{name}: crop is ready to harvest!");
+
+                PhoneVibration.Instance.MediumVibration();
 
                 // Swap to grown crop prefab
                 if (currentCropPrefab)
@@ -89,7 +91,6 @@ public class FarmPlot : MonoBehaviour
     public void HandleTap()
     {
         // Plot unlocking
-        // !! LATER CHANGE THIS TO REQUIRE CURRENCY TO UNLOCK !!
         if (!isOwned)
         {
             //UnlockPlot();
@@ -136,10 +137,11 @@ public class FarmPlot : MonoBehaviour
         {
             if (cropAnchor == null)
             {
-                Debug.LogWarning($"{name} has no crop anchor set!");
+                Debug.Log($"{name} has no crop anchor set!");
                 cropAnchor = transform;
             }
 
+            PhoneVibration.Instance.LightVibration();
             GameObject crop = Instantiate(cropdata.seedlingPrefab, cropAnchor.position, cropAnchor.rotation);
             crop.transform.SetParent(cropAnchor, true);
             crop.transform.localScale = Vector3.one;
@@ -189,6 +191,7 @@ public class FarmPlot : MonoBehaviour
 
             currentCrop = null;
         }
+        // This is the fallback for if I screwed anything up and the script cannot figure out what crop is should be
         else
         {
             // Change state back to empty, get rid of crop
@@ -221,27 +224,23 @@ public class FarmPlot : MonoBehaviour
         isOwned = true;
         Debug.Log($"{name} unlocked!");
 
-        var grid = FindFirstObjectByType<FarmGrid>();
-        if (grid == null || grid.unlockedPlotPrefab == null)
+        if (FarmGrid.Instance.unlockedPlotPrefab == null)
         {
-            Debug.LogWarning("FarmGrid or unlocked prefab not found / assigned");
+            Debug.Log("FarmGrid or unlocked prefab not found / assigned");
             return;
         }
 
         // Spawn the unlocked plot prefab at the position of the locked one
-        GameObject newPlot = Instantiate(
-            grid.unlockedPlotPrefab,
-            transform.position,
-            transform.rotation,
-            transform.parent
-        );
+        GameObject newPlot = Instantiate(FarmGrid.Instance.unlockedPlotPrefab, transform.position, transform.rotation, transform.parent);
 
-        // Update state and name
+        // Update state and name for the new script as the old one will be deleted with the game object
         var newPlotScript = newPlot.GetComponent<FarmPlot>();
         newPlotScript.isOwned = true;
         newPlot.name = gameObject.name;
 
-        // Destroy the old locked plot prefab
+        PhoneVibration.Instance.MediumVibration();
+
+        // Destroy the old locked plot game object and script
         Destroy(gameObject);
     }
 

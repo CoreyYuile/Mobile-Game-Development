@@ -3789,7 +3789,7 @@ Light:
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 2
+    m_Type: 0
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -14029,7 +14029,6 @@ MonoBehaviour:
   selectedCrop: {fileID: 11400000, guid: 4fb9786d0d3b7a642a771b6134a09148, type: 2}
   moneyText: {fileID: 1562774416}
   buyPlotPopupText: {fileID: 716188610}
-  inputtext: {fileID: 1361847988}
   buyPlotPopup: {fileID: 1999945680}
   CropSelection: {fileID: 1689106935}
 --- !u!4 &1553749546
