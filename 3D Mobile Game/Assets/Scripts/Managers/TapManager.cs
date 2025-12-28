@@ -130,7 +130,7 @@ public class TapManager : MonoBehaviour
         {
             if (plot.state == FarmPlot.PlotState.Empty && plot.isOwned == true)
             {
-                plot.PlantSeed(MenuManager.Instance.availableCrops[0]);
+                plot.PlantSeed(MenuManager.Instance.selectedCrop);
             }
         }
     }

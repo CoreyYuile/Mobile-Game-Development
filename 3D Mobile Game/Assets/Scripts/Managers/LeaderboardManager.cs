@@ -162,7 +162,7 @@ public class Leaderboard : MonoBehaviour
         
         Debug.Log(PlayerPrefs.GetString("PlayerName"));
         //PlayerPrefs.DeleteKey("PlayerName");
-        if (PlayerPrefs.GetString("PlayerName") == null)
+        if (PlayerPrefs.GetString("PlayerName") == null || PlayerPrefs.GetString("PlayerName") == "")
         {
             yield return (StartCoroutine(GenerateRandomPlayerName()));
         }
@@ -221,7 +221,7 @@ public class Leaderboard : MonoBehaviour
     private IEnumerator GenerateRandomPlayerName()
     {
         PlayerPrefs.SetString("PlayerName", ("Player#" + UnityEngine.Random.Range(1000, 9999)));
-        return null;
+        yield return null;
     }
 
     public void LoadPlayername()
