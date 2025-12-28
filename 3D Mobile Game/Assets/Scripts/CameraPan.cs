@@ -57,7 +57,7 @@ public class CameraPan : MonoBehaviour
             float difference = currentMagnitude - prevMagnitude;
 
             // zoom the camera in / out by however much necessary
-            Zoom(difference * 0.01f);
+            Zoom(difference * 0.05f);
         }
         // Handle panning the camera
         else if (Input.GetMouseButton(0))

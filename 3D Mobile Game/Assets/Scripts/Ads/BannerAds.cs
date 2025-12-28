@@ -72,5 +72,6 @@ public class BannerAds : MonoBehaviour
     private void BannerLoaded()
     {
         Debug.Log("Banner ad loaded!");
+        //ShowBannerAd();
     }
 }

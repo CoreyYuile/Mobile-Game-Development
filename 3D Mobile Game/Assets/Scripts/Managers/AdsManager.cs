@@ -46,6 +46,6 @@ public class AdsManager : MonoBehaviour
         rewardedAds.LoadRewardedAd();
         bannerAds.LoadBannerAd();
 
-        bannerAds.ShowBannerAd();
+        //bannerAds.ShowBannerAd();
     }
 }
