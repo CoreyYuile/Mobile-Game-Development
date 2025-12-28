@@ -2786,7 +2786,7 @@ Transform:
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
   m_LocalRotation: {x: 0.46193978, y: 0.33141357, z: -0.19134171, w: 0.8001032}
-  m_LocalPosition: {x: -10, y: 20, z: -10}
+  m_LocalPosition: {x: -8.838834, y: 21.650635, z: -8.838834}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -20196,7 +20196,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2026027103}
   - component: {fileID: 2026027102}
-  - component: {fileID: 2026027101}
+  - component: {fileID: 2026027104}
   - component: {fileID: 2026027100}
   m_Layer: 0
   m_Name: CinemachineCamera
@@ -20219,25 +20219,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BoundingVolume: {fileID: 1042950182}
   SlowingDistance: 0.1
---- !u!114 &2026027101
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2026027099}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b617507da6d07e749b7efdb34e1173e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TrackerSettings:
-    BindingMode: 4
-    PositionDamping: {x: 1, y: 1, z: 1}
-    AngularDampingMode: 0
-    RotationDamping: {x: 1, y: 1, z: 1}
-    QuaternionDamping: 1
-  FollowOffset: {x: -10, y: 20, z: -10}
 --- !u!114 &2026027102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20290,12 +20271,43 @@ Transform:
   m_GameObject: {fileID: 2026027099}
   serializedVersion: 2
   m_LocalRotation: {x: 0.46193978, y: 0.33141357, z: -0.19134171, w: 0.8001032}
-  m_LocalPosition: {x: -10, y: 20, z: -10}
+  m_LocalPosition: {x: -8.838834, y: 21.650635, z: -8.838834}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 60, y: 45, z: 0}
+--- !u!114 &2026027104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2026027099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 886251e9a18ece04ea8e61686c173e1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CameraDistance: 25
+  DeadZoneDepth: 2
+  Composition:
+    ScreenPosition: {x: 0, y: 0}
+    DeadZone:
+      Enabled: 1
+      Size: {x: 0.1, y: 0.1}
+    HardLimits:
+      Enabled: 1
+      Size: {x: 0.9, y: 0.95}
+      Offset: {x: 0, y: 0}
+  CenterOnActivate: 1
+  TargetOffset: {x: 0, y: 0, z: 0}
+  Damping: {x: 2, y: 2, z: 2}
+  Lookahead:
+    Enabled: 0
+    Time: 0
+    Smoothing: 0
+    IgnoreY: 0
 --- !u!1001 &2034843289
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21203,6 +21215,7 @@ SceneRoots:
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 1148440804}
+  - {fileID: 2026027103}
   - {fileID: 1429550426}
   - {fileID: 1042950183}
   - {fileID: 1821399662}
@@ -21217,4 +21230,3 @@ SceneRoots:
   - {fileID: 1553749546}
   - {fileID: 249523641}
   - {fileID: 78768377}
-  - {fileID: 2026027103}
