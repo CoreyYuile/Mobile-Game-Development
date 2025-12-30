@@ -26,6 +26,7 @@ public class MenuManager : MonoBehaviour
     [Header("UI Menu GO References")]
 
     public GameObject buyPlotPopup;
+    public GameObject buyPlotRefused;
     public GameObject CropSelection;
 
     private FarmPlot pendingPlot;
@@ -76,6 +77,8 @@ public class MenuManager : MonoBehaviour
         else
         {
             Debug.Log("Not Enough Money!");
+            buyPlotPopup.SetActive(false);
+            buyPlotRefused.SetActive(true);
         }
 
         // Deactivate popup

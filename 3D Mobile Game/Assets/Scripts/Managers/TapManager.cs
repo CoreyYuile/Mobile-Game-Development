@@ -16,11 +16,11 @@ public class TapManager : MonoBehaviour
 
     [Header("Shake Settings")]
 
-    [SerializeField] private float shakeThreshold = 2.5f;
+    [SerializeField] private float shakeThreshold = 1.5f;
     [SerializeField] private float shakeCooldown = 1.0f;
-    public bool isHarvesting = true;
+    private float shakeTimer = 0.0f;
 
-    private float lastTimeShaked;
+    public bool isHarvesting = true;
 
     [Header("References")]
 
@@ -88,16 +88,19 @@ public class TapManager : MonoBehaviour
         }
     }
 
+    // Check if the player is shaking for harvest
     private void DetectShake()
     {
         Vector3 acceleration = Input.acceleration;
 
         float magnitude = acceleration.magnitude;
 
-        if (magnitude > shakeThreshold && Time.time > shakeCooldown)
+        if (magnitude > shakeThreshold && shakeTimer > shakeCooldown)
         {
             Debug.Log("Shake Detected");
-            shakeCooldown = Time.time;
+            shakeTimer = Time.deltaTime;
+
+            // Depends on what is currently selected from the AutoHarvest toggle
             if (isHarvesting)
             {
                 AutoHarvest();
@@ -107,12 +110,16 @@ public class TapManager : MonoBehaviour
                 AutoPlant();
             }
         }
+
+        shakeTimer += Time.deltaTime;
     }
 
     private void AutoHarvest()
     {
-        FarmPlot[] plots = FindObjectsOfType<FarmPlot>();
+        // FindObjectsOfType is obsolete, apparently this is faster??
+        FarmPlot[] plots = FindObjectsByType<FarmPlot>(FindObjectsSortMode.None);
 
+        // Loop through all plots, find what ones are able to be harvested, and harvest them
         foreach (var plot in plots)
         {
             if (plot.state == FarmPlot.PlotState.ReadyToHarvest)
@@ -124,8 +131,9 @@ public class TapManager : MonoBehaviour
 
     private void AutoPlant()
     {
-        FarmPlot[] plots = FindObjectsOfType<FarmPlot>();
+        FarmPlot[] plots = FindObjectsByType<FarmPlot>(FindObjectsSortMode.None);
 
+        // Loop through all plots, find what ones are empty, and plant the selected crop in them
         foreach(var plot in plots)
         {
             if (plot.state == FarmPlot.PlotState.Empty && plot.isOwned == true)
@@ -135,6 +143,7 @@ public class TapManager : MonoBehaviour
         }
     }
 
+    // Cast a ray from the camera / tap position and try to find the selected farm plot
     private void TrySelectPlot(Vector2 screenPosition)
     {
         Ray ray = mainCamera.ScreenPointToRay(screenPosition);

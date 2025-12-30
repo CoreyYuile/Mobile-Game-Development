@@ -83,6 +83,8 @@ public class FarmPlot : MonoBehaviour
                 {
                     currentCropPrefab = Instantiate(currentCrop.grownPrefab, transform.position + Vector3.up * 0.5f, Quaternion.identity, transform);
                 }
+
+                SaveManager.Instance.SaveGame();
             }
         }
     }
@@ -148,6 +150,8 @@ public class FarmPlot : MonoBehaviour
 
             currentCropPrefab = crop;
         }
+
+        SaveManager.Instance.SaveGame();
 
         // Start growth timer
         //StartCoroutine(GrowCrop());
@@ -216,6 +220,8 @@ public class FarmPlot : MonoBehaviour
 
             currentCrop = null;
         }
+
+        SaveManager.Instance.SaveGame();
     }
 
     // Handle unlocking the selected plot
@@ -242,6 +248,8 @@ public class FarmPlot : MonoBehaviour
 
         // Destroy the old locked plot game object and script
         Destroy(gameObject);
+
+        SaveManager.Instance.SaveGame();
     }
 
     // !! THERE HAS TO BE A BETTER WAY TO DO THIS THERE HAS TO BE A BETTER WAY TO DO THIS THERE HAS TO BE A BETTER WAY TO DO THIS !!

@@ -9,6 +9,7 @@ public class PhoneVibration : MonoBehaviour
     // Ok so I made this and then realised that both the hapticfeedback package AND handheld.vibrate don't work on phone is simulator :/
     // Only way to truly check if its working is by making a build, which is gonna SUCK on iOS
     // But hey I guess it works, handheld.vibrate gives a debug log...
+    // !! THIS WORKS, TESTED WITH ANDROID !!
 
     public static PhoneVibration Instance { get; private set; }
 

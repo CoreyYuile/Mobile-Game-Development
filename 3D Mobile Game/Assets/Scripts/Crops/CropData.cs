@@ -9,7 +9,8 @@ public class CropData : ScriptableObject
         Potato,
         Wheat,
         Corn,
-        Pumpkin
+        Pumpkin,
+        Sunflower
     }
     public CropIDs cropID = CropIDs.Tomato;
     public string cropName;

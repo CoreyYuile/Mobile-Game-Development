@@ -30,9 +30,18 @@ public class SaveManager : MonoBehaviour
     }
 
     // Save the game when the game closes
-    private void OnApplicationQuit()
+    // !! THIS DOESN'T WORK ON ANDROID BUT ONFOCUS DOES?!?!?!? !!
+    //private void OnApplicationQuit()
+    //{
+    //    SaveGame();
+    //}
+
+    private void OnApplicationFocus(bool focus)
     {
-        SaveGame();
+        if (!focus)
+        {
+            SaveGame();
+        }
     }
 
     // Get all the necessary data to write to the savesystem

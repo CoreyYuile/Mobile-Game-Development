@@ -59,7 +59,7 @@ public class FarmGrid : MonoBehaviour
 
                 // Instantiate plot, name it
                 GameObject cell = Instantiate(prefabToUse, position, Quaternion.identity, transform);
-                cell.name = $"Cell_{x}_{z}";
+                cell.name = $"Cell {x} {z}";
 
                 // Store to the list of all plots
                 FarmPlot plot = cell.GetComponent<FarmPlot>();
