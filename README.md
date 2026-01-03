@@ -27,6 +27,14 @@ Below is the script which holds all of the vibration functions:
 
 #### Accelerometer
 
+The accelerometer of a mobile device are utilised for two different features within this game:
+* AutoHarvest - Shake to automatically harvest all plots that have fully grown crops
+* AutoPlant - Shake to automatically plant a seed in all empty plots. The type of crop is determined by what crop is currently selected on the UI.
+
+Toggling between these features is controlled by tapping anywhere on this part of the screen:
+
+The accelerometer is supported within Unity Remote.
+
 ### Frameworks
 
 This section explains the code and logic behind features that would be considered as a usage of "frameworks" in CMP6187's Assignment Brief.
