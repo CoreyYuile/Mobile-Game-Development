@@ -28,7 +28,37 @@ The following is a quick breakdown of features that count towards CMP6187's assi
 
 The folder structure for this repository is as follows:
 
++ 3D Mobile Game - This is the main project files for Unity. Most things in here will not be useful aside from the /Assets/ folder.
+  + /Assets
+    + /Assets - Contains all assets ranging from Prefabs, Materials, Textures, Models, etc.
+    + /Packages - Includes most third-party packages / frameworks imported into the project
+    + /Scenes - Contains the Unity scenes used within the final product
+    + /Scripts - Stores all the relevant scripts used within the project
+      + /Ads - All scripts used to initialise ads as well as define individual ad types
+      + /Crops - Stores all of the scriptable objects created for individual crop types as well as the script used to instantiate all cropdata objects
+      + /Leaderboard - External leaderboard scripts required for the framework to run
+      + /Managers - Holds all of the scripts deemed as "Managers" in the project, ranging from UI to Save/Load to Tapping
+    + /Settings - URP assets for graphics
++ Screenshots - all development screenshots and images used within this doc
+
 The folder structure for the CMP6187 .zip file uploaded to moodle should be as follows:
+
++ Bin - Supplied .apk file to play on an android device
++ Code - Project files
+  + 3D Mobile Game - This is the main project files for Unity. Most things in here will not be useful aside from the /Assets/ folder.
+    + /Assets
+      + /Assets - Contains all assets ranging from Prefabs, Materials, Textures, Models, etc.
+      + /Packages - Includes most third-party packages / frameworks imported into the project
+      + /Scenes - Contains the Unity scenes used within the final product
+      + /Scripts - Stores all the relevant scripts used within the project
+        + /Ads - All scripts used to initialise ads as well as define individual ad types
+        + /Crops - Stores all of the scriptable objects created for individual crop types as well as the script used to instantiate all cropdata objects
+        + /Leaderboard - External leaderboard scripts required for the framework to run
+        + /Managers - Holds all of the scripts deemed as "Managers" in the project, ranging from UI to Save/Load to Tapping
+      + /Settings - URP assets for graphics
++ Screenshots - Screenshot evidence of the game being uploaded to storefronts
++ Video - Video explaining all features relevant to CMP6187's markscheme
++ README - .txt file that relays important info and links to this page for official documentation and further reading
 
 ### Available Storefronts / Installation Guide
 
