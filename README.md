@@ -163,4 +163,39 @@ Various assets and tutorials were used and adapted in the creation of this game.
 
 ### References
 
+* Scriptable Objects
+  * https://youtu.be/7jxS8HIny3Q?si=GLCORJSPPeP3tTsj
+  * https://youtu.be/7jxS8HIny3Q?si=zg3SiVK8MpiEA2Ki
+  * https://youtu.be/dIAAi54Ty58?si=Yvgvx-4kNz9V_P8R
+* Accelerometer
+  * https://youtu.be/XZWNXsjIvrE?si=Td2UqD7l8Jb34slr
+* Camera Panning & Zooming
+  * https://youtu.be/K_aAnBn5khA?si=bXjfsDndzLOd5wU8
+  * https://youtu.be/4_HUlAFlxwU?si=zA6KikWkpUPUirYv
+* Leaderboard Manager
+  * Code derived from a previous game project available at: https://shlumptee.itch.io/gravimatic
+* Saving / Loading
+  * https://youtu.be/6uMFEM-napE?si=aIN2AUGL3sBdMFsT
+  * https://youtu.be/aUi9aijvpgs?si=fpx-ftzX0WNnWQ2e
+* Unity Ads
+  * https://youtu.be/seTvVkaU2dk?si=h5mEIusPm4SJp9ZC
+* API Requests
+  * https://youtu.be/2vjpwNFU5To?si=cZu6mcsaXmkxyB1i
+  * https://youtu.be/PnCtUemkqZs?si=hYMk8ds0ZP7v-QBV
+
 ### Credits
+
+All credits are listed in-game, but links will also be provided here.
+
+* Leaderboard Manager
+  * https://danqzq.itch.io/leaderboard-creator
+* Low Poly Simple Nature Pack
+  * https://assetstore.unity.com/packages/3d/environments/landscapes/low-poly-simple-nature-pack-162153
+* Farming Crops Low Poly Models
+  * https://craftpix.net/freebies/free-farming-crops-3d-low-poly-models/?num=1&count=35&sq=farm%20crops&pos=3
+* Farm Ranch Low Poly Pack
+  * https://assetstore.unity.com/packages/3d/props/pandazole-farm-ranch-low-poly-pack-206756
+* 2D Casual Game UI
+  * https://assetstore.unity.com/packages/2d/gui/2d-casual-game-ui-hd-259245
+* Low Poly Bird
+  * https://assetstore.unity.com/packages/3d/characters/animals/birds/bird-330238
