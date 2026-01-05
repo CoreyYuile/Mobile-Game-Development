@@ -12,7 +12,7 @@ public class WeatherData : MonoBehaviour
 
     [Header("Settings")]
 
-    public float updateMinuteDelay = 10f;
+    public float updateCallDelay = 600.0f;
     public string OWAPIKey;
 
     [Header("References")]
@@ -28,7 +28,7 @@ public class WeatherData : MonoBehaviour
     public WeatherType currentWeatherType = WeatherType.clear;
 
     private string IPAddress;
-    public float timer;
+    public float callTimer;
     private bool isLocationInitialized = false;
 
     public enum WeatherType
@@ -66,14 +66,14 @@ public class WeatherData : MonoBehaviour
         // Update the weather every hour (only have something like 1000 requests free per day)
         // !! CHANGE THIS TO DATETIME STUFF !!
         // Doesn't really work the intended way currently lmao.
-        if (timer <= 0)
+        if (callTimer <= 0)
         {
             StartCoroutine(GetWeatherInfo());
-            timer = updateMinuteDelay * 60;
+            callTimer = updateCallDelay;
         }
         else
         {
-            timer -= Time.deltaTime;
+            callTimer -= Time.deltaTime;
         }
     }
 
@@ -130,7 +130,7 @@ public class WeatherData : MonoBehaviour
 
         // Variables set to allow openweather to run
         isLocationInitialized = true;
-        timer = 0;
+        callTimer = 0;
         Debug.Log($"Location found {cityName}, {latitude}, {longitude}");
     }
 
@@ -197,5 +197,4 @@ public class WeatherInfo
 public class WeatherCondition
 {
     public string main;
-    public string description;
 }

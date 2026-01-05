@@ -9,20 +9,20 @@ public class CameraPan : MonoBehaviour
 
     // !! COMMENT THROUGH ALL OF THIS OTHERWISE I'LL FORGET SOMETHING LIKE A DUMB IDIOT LATER ON !!
 
-    private Vector3 touch;
-    //public Camera cam;
-    public CinemachineCamera cam;
-    public Transform target;
+    [Header("Cam Settings")]
+
     public float moveSpeed = 0.025f;
     public float groundZ = 0;
     public float zoomOutMin = 50.0f;
     public float zoomOutMax = 90.0f;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
+    private Vector3 touch;
 
-    }
+    [Header("References")]
+
+    //public Camera cam;
+    public CinemachineCamera cam;
+    public Transform target;
 
     // Update is called once per frame
     void Update()

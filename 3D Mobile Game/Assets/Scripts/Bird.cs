@@ -5,7 +5,7 @@ public class Bird : MonoBehaviour
 
     private float speed = 5.0f;
 
-    [Header("Spawning Settings")]
+    [Header("Settings")]
 
     public float minXSpawnCoord = -95.0f;
     public float maxXSpawnCoord = -55.0f;
@@ -23,8 +23,10 @@ public class Bird : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Move birds
         transform.Translate(Vector3.right * speed * Time.deltaTime, Space.World);
 
+        // If the birds go too far off-scene, reset them
         if (transform.position.x > endCoord)
         {
             ResetBird();
@@ -33,6 +35,7 @@ public class Bird : MonoBehaviour
 
     private void ResetBird()
     {
+        // Get a random spawn pos so that they don'tr repeat the same path
         float randomZ = Random.Range(minZCoord, maxZCoord);
         float randomX = Random.Range(minXSpawnCoord, maxXSpawnCoord);
 

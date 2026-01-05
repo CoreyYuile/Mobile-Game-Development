@@ -15,7 +15,7 @@ public class CropData : ScriptableObject
     public CropIDs cropID = CropIDs.Tomato;
     public string cropName;
     
-    [Header("Timing")]
+    [Header("Timer")]
     public float growthDuration = 5.0f;
 
     [Header("Rewards")]

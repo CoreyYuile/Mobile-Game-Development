@@ -117,7 +117,7 @@ public class SaveManager : MonoBehaviour
     // Save to file
     public static void WriteSave(SaveData data)
     {
-        string json = JsonUtility.ToJson(data, true);
+        string json = JsonUtility.ToJson(data);
         File.WriteAllText(savePath, json);
         Debug.Log("Game saved to: " + savePath);
     }

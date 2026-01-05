@@ -80,7 +80,7 @@ public class TapManager : MonoBehaviour
                     // If they are, go ahead with checking what the player has tapped on
                     if (isTapping)
                     {
-                        TrySelectPlot(touch.position);
+                        SelectPlot(touch.position);
                     }
                     isTapping = false;
                     break;
@@ -115,6 +115,7 @@ public class TapManager : MonoBehaviour
         shakeTimer += Time.deltaTime;
     }
 
+    // Harvest all plots with crops that are fully grown
     private void AutoHarvest()
     {
         // FindObjectsOfType is obsolete, apparently this is faster??
@@ -130,6 +131,7 @@ public class TapManager : MonoBehaviour
         }
     }
 
+    // Plant in all available empty plots
     private void AutoPlant()
     {
         // FindObjectsOfType is obsolete, apparently this is faster??
@@ -146,11 +148,12 @@ public class TapManager : MonoBehaviour
     }
 
     // Cast a ray from the camera / tap position and try to find the selected farm plot
-    private void TrySelectPlot(Vector2 screenPosition)
+    private void SelectPlot(Vector2 screenPosition)
     {
         Ray ray = mainCamera.ScreenPointToRay(screenPosition);
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
+            // Check if hit object is a farm plot
             FarmPlot plot = hit.collider.GetComponentInParent<FarmPlot>();
             if (plot != null)
             {

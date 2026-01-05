@@ -43,17 +43,11 @@ public class FarmPlot : MonoBehaviour
     //private MenuManager menuManager;
     //private MoneyManager moneyManager;
 
-    private void Start()
-    {
-        //menuManager = FindAnyObjectByType<MenuManager>();
-        //moneyManager = FindAnyObjectByType<MoneyManager>();
-    }
-
     private void Update()
     {
         if (state == PlotState.Growing && currentCrop != null)
         {
-            // Check if elapsed time has gone past growthDuration
+            // Get elapsed time between now and when the crop was planted
             double elapsedSeconds = (DateTime.UtcNow - plantedTime).TotalSeconds;
 
             float growthMultiplier = 1.0f;
@@ -215,7 +209,7 @@ public class FarmPlot : MonoBehaviour
             // Play vibration
             PhoneVibration.Instance.HeavyVibration();
 
-            // Check if a weather multiplier should be applied
+            // Check if a weather multiplier should be applied to the amount paid to the player
             if (WeatherData.Instance.currentWeatherType == WeatherData.WeatherType.rain)
             {
                 MoneyManager.Instance.AddMoney(currentCrop.harvestReward * 2);
