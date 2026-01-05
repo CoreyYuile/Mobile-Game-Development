@@ -88,13 +88,14 @@ public class TapManager : MonoBehaviour
         }
     }
 
-    // Check if the player is shaking for harvest
+    // Check if the player is shaking for harvest / planting
     private void DetectShake()
     {
         Vector3 acceleration = Input.acceleration;
 
         float magnitude = acceleration.magnitude;
 
+        // Check if the magnitude of the player's shake surpasses the threshold (so it doesn't accidentally trigger)
         if (magnitude > shakeThreshold && shakeTimer > shakeCooldown)
         {
             Debug.Log("Shake Detected");

@@ -58,6 +58,7 @@ public class FarmPlot : MonoBehaviour
 
             float growthMultiplier = 1.0f;
 
+            // Checks for if a weather multiplier should be added to the growth time
             if (WeatherData.Instance.currentWeatherType == WeatherData.WeatherType.rain)
             {
                 growthMultiplier = 0.5f;
@@ -66,12 +67,15 @@ public class FarmPlot : MonoBehaviour
             {
                 growthMultiplier = 1.25f;
             }
+
+            // Check if enough time has passed for seed to grow into a crop
             if (elapsedSeconds >= (currentCrop.growthDuration * growthMultiplier))
             {
                 // Change state and update visuals
                 state = PlotState.ReadyToHarvest;
                 Debug.Log($"Crop is ready to harvest at {name}!");
 
+                // Play vibration
                 PhoneVibration.Instance.MediumVibration();
 
                 // Swap to grown crop prefab
@@ -132,7 +136,6 @@ public class FarmPlot : MonoBehaviour
 
         // Change state
         state = PlotState.Growing;
-        Debug.Log($"Planted a seed at {name}");
 
         // Instantiate the seed prefab at the anchor position on the plot
         if (seedlingPrefab)
@@ -143,7 +146,10 @@ public class FarmPlot : MonoBehaviour
                 cropAnchor = transform;
             }
 
+            // Play vibration
             PhoneVibration.Instance.LightVibration();
+
+            // Spawn the crop seed
             GameObject crop = Instantiate(cropdata.seedlingPrefab, cropAnchor.position, cropAnchor.rotation);
             crop.transform.SetParent(cropAnchor, true);
             crop.transform.localScale = Vector3.one;
@@ -151,6 +157,7 @@ public class FarmPlot : MonoBehaviour
             currentCropPrefab = crop;
         }
 
+        Debug.Log($"Planted a seed at {name}");
         SaveManager.Instance.SaveGame();
 
         // Start growth timer
@@ -162,7 +169,7 @@ public class FarmPlot : MonoBehaviour
     //    yield return new WaitForSeconds(growthDuration);
 
     //    state = PlotState.ReadyToHarvest;
-    //    Debug.Log($"{name}: crop is ready to harvest!");
+    //    Debug.Log($"crop is ready to harvest at {name}");
 
     //    // Swap to grown crop prefab
     //    if (currentCropPrefab)
@@ -178,6 +185,7 @@ public class FarmPlot : MonoBehaviour
     // Handles the harvest
     public void HarvestCrop()
     {
+        // This is the fallback for if I screwed anything up and the script cannot figure out what crop is should be
         if (currentCrop == null)
         {
             Debug.Log("!! NO CROP DATA, DEFAULTING TO BASE SETTINGS !!");
@@ -195,7 +203,6 @@ public class FarmPlot : MonoBehaviour
 
             currentCrop = null;
         }
-        // This is the fallback for if I screwed anything up and the script cannot figure out what crop is should be
         else
         {
             // Change state back to empty, get rid of crop
@@ -205,8 +212,10 @@ public class FarmPlot : MonoBehaviour
                 Destroy(currentCropPrefab);
             }
 
-            // Give some sort of haptic feedback, reward player with money
-            PhoneVibration.Instance.DefaultVibration();
+            // Play vibration
+            PhoneVibration.Instance.HeavyVibration();
+
+            // Check if a weather multiplier should be applied
             if (WeatherData.Instance.currentWeatherType == WeatherData.WeatherType.rain)
             {
                 MoneyManager.Instance.AddMoney(currentCrop.harvestReward * 2);

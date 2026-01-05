@@ -19,15 +19,20 @@ public class BannerAds : MonoBehaviour
 #endif
     }
 
+    // Load the banner ad
     public void LoadBannerAd()
     {
+        // Set a position for the banner
         Advertisement.Banner.SetPosition(BannerPosition.BOTTOM_CENTER);
+
+        // Options for specifying what callbacks should be used
         BannerLoadOptions options = new BannerLoadOptions
         {
             loadCallback = BannerLoaded,
             errorCallback = BannerLoadedError
         };
 
+        // Load the banner ad with the correct banner unit ID
         Advertisement.Banner.Load(adUnitID, options);
     }
 

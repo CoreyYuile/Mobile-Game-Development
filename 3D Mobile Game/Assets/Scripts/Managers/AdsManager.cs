@@ -40,6 +40,7 @@ public class AdsManager : MonoBehaviour
         
     }
 
+    // Load ads ahead of time
     public void OnAdsInitialised()
     {
         interstitialAds.LoadInterstitialAd();
