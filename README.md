@@ -100,6 +100,10 @@ The accelerometer of a mobile device are utilised for two different features wit
 * AutoHarvest - Shake to automatically harvest all plots that have fully grown crops
 * AutoPlant - Shake to automatically plant a seed in all empty plots. The type of crop is determined by what crop is currently selected on the UI.
 
+Usage of it can be found in the TapManager.cs script, where the magnitude of the Vector3 value is used to be compared against a threshold value. This threshold value is put in place so that the game doens't consider any slight movement to be an indication of shaking. From there the script will call one of two functions depending on what the player has selected the toggle to be set to.
+
+The functions essentially loop through every farm plot in the scene and either call functions to plant whatever is the currently selected crop or harvest all available crops.
+
 Toggling between these features is controlled by tapping anywhere on this part of the screen:
 
 The accelerometer is supported within Unity Remote.
@@ -110,17 +114,35 @@ This section explains the code and logic behind features that would be considere
 
 #### Unity Ads
 
+Unity ads is a framework / package that allows for the displaying of ads to be made through Unity's services. Within this project Advertisement Legacy 4.4.2 is used.
+
+Originally the most up-to-date version of Unity ads was used, however there seemed to be a commonly cited bug with that version where banner ads were more likely to never get loaded. For this reason Advertisement Legacy was downgraded.
+
 ##### Rewarded Ads
+
+Rewarded ads are used in this game to give the player 100 money after watching an ad. To see this in action, tap anywhere on the plus button next to the money indicator.
 
 ##### Banner Ads
 
+Banner ads are shown in the game whenever the player decides to open the leaderboard while in the farm scene. This does not happen for the leaderboard seen in the main menu as we do not yet have ads initialised within that scene.
+
 #### Leaderboard Manager
+
+The Leaderboard Manager is a plugin / package / framework for Unity created by Danial Jumagaliyev. The download page for this is available at: [https://danqzq.itch.io/leaderboard-creator]
+
+Much of the leaderboard code within this project was taken from my previous project Gravimatic (available at [https://shlumptee.itch.io/gravimatic]), which was code derived and modified from Danial's official documentation, online tutorials utilising this framework, and some code from demos.
 
 #### APIs
 
+APIs are used to collect weather data from the player's general location. This data is then used to affect gameplay in ways such as increasing / decreasing growth time per crop or giving out bonus money for harvesting while a certain weather type is active.
+
+Any personal information gathered from these APIs are temporary and never saved for any additional usage. The data collected is only used for determining the player's realtime weather to make gameplay adjustments accordingly.
+
 ##### Locational Requests
 
-A locational request to an API is called in order to be able to call openweather with the correct info in order to get accurate data of the weather of the user's rough geographical location.
+A locational request to two APIs are called in order to be able to call openweather with the correct info in order to get accurate data of the weather of the user's rough geographical location.
+
+The first API used is [https://www.ipify.org/], which is used to get the player's current IP address temporarily
 
 ##### Weather Request
 
@@ -144,15 +166,49 @@ Please Refer to the Vibration & Haptics section above.
 
 ## Gameplay Explanation
 
+### Scenes
+
+Idle Farmer consists of 2 scenes. A main menu and then the main game scene (referred to as "Farm" in the project files).
+
+The main menu holds the credits section as well as quick access to the [Leaderboard](https://github.com/CoreyYuile/Mobile-Game-Development/edit/main/README.md#leaderboard-manager) to change username etc.
+
+The farm scene is where main gameplay takes place.
+
 ### Saving / Loading
 
 ### FarmPlot & States
 
-#### Crop Handling
+#### Grid Generation
+
+#### Plot Unlocking
+
+#### Plot States
+
+#### Crop Selection and Handling
 
 ### Mobile Controls
 
+### "AutoHarvest" / "AutoPlant"
+
+These terms refer to the gameplay addition of shaking the mobile device to either plant or harvest. In hindsight there is definitely a better and more concise name for this, however at the time this is what I called then in development.
+
+Both of these features use the accelerometer, which is better explained in [this section](https://github.com/CoreyYuile/Mobile-Game-Development/edit/main/README.md#accelerometer).
+
+#### AutoHarvest
+
+In order for this feature to be chosen out of the two, make sure that the AutoHarvest toggle is set to "true" (indicated by the tick in the circle).
+
+The associated function for this is AutoHarvest(), located within TapManager.cs, and will iterate through every plot in the scene and check if their current state is set to ReadyToHarvest. If this is the case, call to that plot's FarmPlot script and execute the HarvestCrop() function. For more information on this function please refer to the [Plot States section](https://github.com/CoreyYuile/Mobile-Game-Development/edit/main/README.md#plot-states).
+
+#### AutoPlant
+
+In order for this feature to be chosen out of the two, make sure that the AutoHarvest toggle is set to "false" (indicated by no tick being visible in the circle).
+
+The associated function for this is AutoPlant(), located within TapManager.cs, and will iterate through every plot found in the scene and check if the have been unlocked AND their state is currently set to empty. If both of these conditions are met, call the plot's FarmPlot script and execute the PlantSeed() function. For more information on this function please refer to the [Plot States section](https://github.com/CoreyYuile/Mobile-Game-Development/edit/main/README.md#plot-states).
+
 ## Development Screenshots & Concepts
+
+The following are a selection of screenshots and concept drawings taken during development. For more screenshots please view the /Screenshots/ folder of this repository.
 
 ### Concept Drawings
 
