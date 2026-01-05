@@ -113,7 +113,7 @@ Usage of it can be found in the TapManager.cs script, where the magnitude of the
 
 The functions essentially loop through every farm plot in the scene and either call functions to plant whatever is the currently selected crop or harvest all available crops.
 
-Toggling between these features is controlled by tapping anywhere on this part of the screen:
+Toggling between these features is controlled by tapping anywhere on the toggle below the weather info panel in the main UI.
 
 The accelerometer is supported within Unity Remote.
 
