@@ -55,7 +55,16 @@ public class FarmGrid : MonoBehaviour
                 bool isCenterPlot = (x == centerX || x == centerX - 1) && (z == centerZ || z == centerZ - 1);
 
                 // If center plot, use unlockedPlotPrefab
-                GameObject prefabToUse = isCenterPlot ? unlockedPlotPrefab : lockedPlotPrefab;
+                GameObject prefabToUse = null;
+
+                if (isCenterPlot)
+                {
+                    prefabToUse = unlockedPlotPrefab;
+                }
+                else
+                {
+                    prefabToUse = lockedPlotPrefab;
+                }
 
                 // Instantiate plot, name it
                 GameObject cell = Instantiate(prefabToUse, position, Quaternion.identity, transform);

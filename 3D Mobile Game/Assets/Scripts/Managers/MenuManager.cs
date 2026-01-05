@@ -92,7 +92,7 @@ public class MenuManager : MonoBehaviour
     // Display a rewarded ad on the player's screen
     public void OnShowRewardedAd()
     {
-        AdsManager.instance.rewardedAds.ShowRewardedAd();
+        AdsManager.Instance.rewardedAds.ShowRewardedAd();
     }
 
     public void ShowCropSelection(FarmPlot plot)

@@ -30,7 +30,7 @@ gameID = androidGameID;
     public void OnInitializationComplete()
     {
         Debug.Log("Ads initialised!");
-        AdsManager.instance.OnAdsInitialised();
+        AdsManager.Instance.OnAdsInitialised();
     }
 
     public void OnInitializationFailed(UnityAdsInitializationError error, string message)

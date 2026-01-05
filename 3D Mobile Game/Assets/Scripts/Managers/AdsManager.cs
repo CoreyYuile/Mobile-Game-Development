@@ -8,18 +8,18 @@ public class AdsManager : MonoBehaviour
     public RewardedAds rewardedAds;
     public BannerAds bannerAds;
 
-    public static AdsManager instance { get; private set; }
+    public static AdsManager Instance { get; private set; }
 
     public bool isRewarded;
 
     private void Awake()
     {
-        if (instance != null && instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
-        instance = this;
+        Instance = this;
         DontDestroyOnLoad(gameObject);
 
         // Load ads ahead of time
