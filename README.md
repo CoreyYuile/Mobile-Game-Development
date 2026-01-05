@@ -6,6 +6,7 @@
 
 Welcome to the official documentation for my mobile game project uploaded for BCU's CMP6187 Mobile Game Development module. This documentation will give a comprehensive guide through all relevant features pertaining to CMP6187's mark scheme as well as other features specific to the gameplay of this project. It will also give a brief overview of folder structure as well as showing development screenshots and design concepts. Finally this documentation will also link any relevant tutorials or assets used in the creation of this project.
 
+The game developed is a idle / offline farming game made within Unity 6000.0.58f2. The genre is hyper-casual and theme was low-poly modern farms.
 
 There is also a video included in the .zip folder uploaded to Moodle that will explain specifically Frameworks and Mobile Features.
 
@@ -65,7 +66,9 @@ The folder structure for the CMP6187 .zip file uploaded to moodle should be as f
 
 You must have an android device in order to run the supplied builds of this game. Supplied builds can either be found over on my Itch.io page or in the CMP6187 .zip file provided in the module's respective Moodle page.
 
-A downloadable .apk of this project is available over on Itch.io, accessible through this link - [LINK HERE]
+A downloadable .apk of this project is available over on Itch.io, accessible through this link - https://shlumptee.itch.io/idle-farmer
+
+<img width="1803" height="923" alt="Screenshot 2026-01-05 123433" src="https://github.com/user-attachments/assets/127ab6fa-45de-43b0-8951-f2f3c60d246c" />
 
 If choosing the .apk from the CMP6187 .zip you must transfer it over to an android device.
 
@@ -73,7 +76,11 @@ From there open the .apk and begin allowing the download of the game. Once compl
 
 The project was also uploaded onto the Google Play Store in a .aab format, however is unavailable for download due to the 12 playtester restriction. However hopefully proof of it's upload was included in the associated project video, where it shows that the game downloads and runs from the Play Store! Further proof of it's upload can be seen in these screenshots below on Google Developer Console:
 
-ADD PHOTOS HERE
+<img width="1577" height="831" alt="Screenshot 2026-01-05 003544" src="https://github.com/user-attachments/assets/7b395d04-124c-4587-9488-a7940b9f0559" />
+
+![IMG_8533](https://github.com/user-attachments/assets/c0595d33-57f6-46e4-a777-418be7947024)
+
+![IMG_8534](https://github.com/user-attachments/assets/f32e0b2c-228e-4279-b238-21a08d6d327b)
 
 ## Feature Explanation
 
@@ -94,6 +101,8 @@ There is also a DefaultVibration function that utilises Unity's in-built haptics
 
 Below is the script which holds all of the vibration functions:
 
+<img width="362" height="509" alt="Haptic Funcs" src="https://github.com/user-attachments/assets/0a109545-8d07-4f03-aa4b-4e527894c9db" />
+
 #### Accelerometer
 
 The accelerometer of a mobile device are utilised for two different features within this game:
@@ -107,6 +116,8 @@ The functions essentially loop through every farm plot in the scene and either c
 Toggling between these features is controlled by tapping anywhere on this part of the screen:
 
 The accelerometer is supported within Unity Remote.
+
+<img width="883" height="470" alt="Accelerometer Func" src="https://github.com/user-attachments/assets/f534d66f-aa4f-47d7-89e1-eb2d86489427" />
 
 ### Frameworks
 
@@ -144,7 +155,16 @@ A locational request to two APIs are called in order to be able to call openweat
 
 The first API used is [https://www.ipify.org/], which is used to get the player's current IP address temporarily
 
+<img width="768" height="405" alt="IP API Call" src="https://github.com/user-attachments/assets/c0b23e87-595e-477a-bcf9-c202f6cdcd31" />
+
+
+<img width="1310" height="582" alt="LatLon API Call" src="https://github.com/user-attachments/assets/f71afab3-4f36-482d-a3d7-4a5d1b0ec21a" />
+
 ##### Weather Request
+
+
+
+<img width="1386" height="762" alt="Weather API Call" src="https://github.com/user-attachments/assets/63cc0cc3-25cc-4f92-a782-4a0f0713f578" />
 
 #### CineMachine
 
@@ -174,6 +194,8 @@ The main menu holds the credits section as well as quick access to the [Leaderbo
 
 The farm scene is where main gameplay takes place.
 
+<img width="169" height="113" alt="Scenes folder loc" src="https://github.com/user-attachments/assets/80a39af6-83a9-4790-bc75-6482ab0ed558" />
+
 ### Saving / Loading
 
 ### FarmPlot & States
@@ -188,6 +210,38 @@ The farm scene is where main gameplay takes place.
 
 ### Mobile Controls
 
+#### Camera Panning
+
+Panning the camera is handled in the CameraPan.cs script. This script determines when the player is swiping to pan the camera or pinch to zoom in / out.
+
+##### Panning
+
+If there is one finger on the screen, get the distance between it's starting position and current position. Then calculate the movement direction the player is swiping in.
+
+This is a bit more complex than if the camera was top-down since Idle Farmer's camera is angled slightly, and therefore camforward and camright are used to make sure that the camera still pans across the horizontal plane appropriately.
+
+However since the CineMachine Camera is focusing on a target to move around, we apply the translation to the target object instead of the Camera. This target also needs rough boundaries to make sure that it doesn't go too far outside the game scene and leave our camera behind, so the position of the target is clamped to similar level boundaries as the camera.
+
+<img width="1529" height="545" alt="CameraPan Pan Dectection" src="https://github.com/user-attachments/assets/f83daae8-5ba4-432d-a697-4305822763db" />
+
+##### Zooming
+
+If two fingers are detected on the screen, get the difference in distance between the starting position and current position for BOTH fingers. Then get the vector magnitudes of where they started and where they are now. If there is a discernable difference between the magnitude of both vectors, that indicates that the player is wanting to zoom in / out. Call the zoom function with whatever value this distance ends up being. The zoom function adjusts the CineMachine Camera's FOV slider. 
+
+<img width="744" height="340" alt="CameraPan Zoom Detection" src="https://github.com/user-attachments/assets/10b84c73-815f-4ade-a30c-a2319e1e7ea6" />
+
+
+#### Tapping
+
+Tapping on the screen is handled in the TapManager.cs script.
+
+This will first check to make sure that the player is not just tapping on the screen to pan the camera. If they are not doing this, that means that the player is indicating they are tapping on something. In this game, tapping is only used for UI selections (which this script will ignore a tap made if it is over a UI item) or for interacting with one of the many farm plots.
+
+Try selecting whatever plot the player's tap ended up being over. To do this we cast a ray forward from the camera. If we hit an object with the FarmPlot component, then we know that we have found a farm plot. Call the FarmPlot's HandleTap() function to deal with whatever is needed.
+
+<img width="817" height="769" alt="TapManager Tap Dectection" src="https://github.com/user-attachments/assets/6bab52a9-4e18-4fdb-8b9b-856979a39b8f" />
+<img width="644" height="252" alt="TapManager SelectPlot" src="https://github.com/user-attachments/assets/e21fed16-8ad4-4dec-b427-114a3a39d76e" />
+
 ### "AutoHarvest" / "AutoPlant"
 
 These terms refer to the gameplay addition of shaking the mobile device to either plant or harvest. In hindsight there is definitely a better and more concise name for this, however at the time this is what I called then in development.
@@ -200,11 +254,15 @@ In order for this feature to be chosen out of the two, make sure that the AutoHa
 
 The associated function for this is AutoHarvest(), located within TapManager.cs, and will iterate through every plot in the scene and check if their current state is set to ReadyToHarvest. If this is the case, call to that plot's FarmPlot script and execute the HarvestCrop() function. For more information on this function please refer to the [Plot States section](https://github.com/CoreyYuile/Mobile-Game-Development/edit/main/README.md#plot-states).
 
+<img width="696" height="278" alt="AutoHarvest Func" src="https://github.com/user-attachments/assets/d91a7fe8-1ff0-410b-953c-b7345d87d41e" />
+
 #### AutoPlant
 
 In order for this feature to be chosen out of the two, make sure that the AutoHarvest toggle is set to "false" (indicated by no tick being visible in the circle).
 
 The associated function for this is AutoPlant(), located within TapManager.cs, and will iterate through every plot found in the scene and check if the have been unlocked AND their state is currently set to empty. If both of these conditions are met, call the plot's FarmPlot script and execute the PlantSeed() function. For more information on this function please refer to the [Plot States section](https://github.com/CoreyYuile/Mobile-Game-Development/edit/main/README.md#plot-states).
+
+<img width="720" height="280" alt="AutoPlant Func" src="https://github.com/user-attachments/assets/0cbdb63a-a617-4b34-96a3-b08431274edb" />
 
 ## Development Screenshots & Concepts
 
@@ -212,7 +270,37 @@ The following are a selection of screenshots and concept drawings taken during d
 
 ### Concept Drawings
 
+![IMG_8535](https://github.com/user-attachments/assets/7adcf888-40dd-410b-9121-d86e29986cc8)
+
+![IMG_8536](https://github.com/user-attachments/assets/64b88bc5-b4ea-49ee-9e41-7bcb5f94ddc7)
+
+![IMG_8537](https://github.com/user-attachments/assets/499aa5e0-5bf7-4f2d-953d-ac969936a363)
+
+![IMG_8376](https://github.com/user-attachments/assets/29a0fe89-eec5-4fa6-8e69-d9c360910507)
+
+![IMG_8375](https://github.com/user-attachments/assets/ffa12605-acf6-41ab-8260-0164cb29a56d)
+
+<img width="1343" height="719" alt="Screenshot 2026-01-05 200302" src="https://github.com/user-attachments/assets/f07f152b-26e1-484f-b1c5-5d86960bf3ce" />
+
+<img width="1281" height="701" alt="Untitled" src="https://github.com/user-attachments/assets/8ad66805-cdca-4531-8f69-bb9384beafa5" />
+
 ### Screenshots
+
+<img width="1233" height="859" alt="Screenshot 2025-10-18 161810" src="https://github.com/user-attachments/assets/47aea58e-c39f-4b5b-b36f-b07aaa7fcf4e" />
+
+<img width="888" height="863" alt="Screenshot 2025-10-18 161825" src="https://github.com/user-attachments/assets/a5ad39bc-7d96-4cd9-bb77-6121475c4f02" />
+
+<img width="776" height="865" alt="Screenshot 2025-10-18 161911" src="https://github.com/user-attachments/assets/4269747b-f613-45e5-9729-c6ec6e133e56" />
+
+<img width="752" height="858" alt="Screenshot 2025-10-19 155226" src="https://github.com/user-attachments/assets/f2d1a031-901f-48da-8b2d-a33ca6a347f2" />
+
+<img width="1567" height="863" alt="Screenshot 2025-10-19 172657" src="https://github.com/user-attachments/assets/247e93dd-f87e-4090-b88d-4cb2771c5236" />
+
+<img width="1566" height="856" alt="Screenshot 2025-12-17 231226" src="https://github.com/user-attachments/assets/e687fd8b-03bb-4912-a1b9-af37c6d5cab4" />
+
+<img width="483" height="860" alt="Screenshot 2025-12-23 204229" src="https://github.com/user-attachments/assets/f2ca68c3-ab65-4d4d-ad16-1b6c3e2f698d" />
+
+<img width="477" height="856" alt="Screenshot 2025-12-24 011207" src="https://github.com/user-attachments/assets/42b2fc54-b513-4e52-875c-bbec58215550" />
 
 ## References & Credits
 
