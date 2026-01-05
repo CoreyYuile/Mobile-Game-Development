@@ -252,9 +252,30 @@ The farm scene is where main gameplay takes place.
 
 ### Saving / Loading
 
+Saving and loading takes place in 2 scripts: SaveManager.cs for reading and writing JSON, and FarmGrid.cs for assigning JSON data to each plot.
+
+SaveManager.cs will write all relevant data for each plot (as well as data such as current money and net money) to a JSON file and place it in wherever Unity determines a persistent data path to be. Reading this file just involves getting JSONUtilities to parse through the file and return the relevant information.
+
+<img width="939" height="841" alt="Screenshot 2026-01-05 234132" src="https://github.com/user-attachments/assets/bfe52cd1-a1d5-42b1-8a41-c6c50da1f4d4" />
+<img width="806" height="362" alt="Screenshot 2026-01-05 234143" src="https://github.com/user-attachments/assets/73e0b23c-cf6b-42eb-b1f9-96c3f4b05bd4" />
+
+The main loading of individual plot data is found within the FarmGrid.cs script, where we will iterate through each coordinate in the grid, match it to the relevant plot in the scene, and then set things like if it is owned or not, what state it was in, if there was a crop growing, etc. This will also cross reference with the list of CropData objects found in MenuManager to figure out what index of the list to use to spawn the correct crop.
+
+<img width="760" height="914" alt="Screenshot 2026-01-05 234427" src="https://github.com/user-attachments/assets/1618704f-645a-4c2b-b204-3b0bcfec44df" />
+
+This function is super long and won't fit on the screen entirely, so to read more of it please open up the FarmGrid.cs file.
+
 ### FarmPlot & States
 
 #### Grid Generation
+
+At the start of the scene, a script called FarmGrid.cs will begin building the grid of farm plots seen in-game. This script is also responsible for populating these plots with the save info taken from the JSON data. For more info on that, refer to the above section.
+
+During the generation of the grid of plots, it will check to see if a plot is one of 4 centre plots: if it is, then ensure that it starts in the unlocked prefab so that the player can start planting there. If not then just make it a normal locked plot for now. Once the generation is complete it will run the function to assign save info data.
+
+We then also give each plot a coordinate name to better figure out which is which in debugging.
+
+<img width="870" height="900" alt="Screenshot 2026-01-05 233642" src="https://github.com/user-attachments/assets/c4df2320-1d83-41c9-ab00-7fab92e588b3" />
 
 #### Plot Unlocking
 
@@ -284,7 +305,21 @@ If the plot is ready to harvest, we call the HarvestCrop() function, which will 
 
 <img width="732" height="840" alt="Screenshot 2026-01-05 230554" src="https://github.com/user-attachments/assets/9c42b93f-798f-4e38-b0f3-78370fbd2f00" />
 
-#### Crop Selection and Handling
+#### Crop Selection
+
+Different types of crops are handled utilising Scriptable Objects, which was a feature in Unity that I had been meaning to learn for a long while. It has a main class that it derives from which specifies different types of variables, and then in our asset creation we are able to make a new object of this class and change the parameters from there. This results in a faster setup of different permutations of crops which all have different payout rates and growth durations, etc.
+
+<img width="364" height="489" alt="Screenshot 2026-01-05 232849" src="https://github.com/user-attachments/assets/3d59a5b6-a1fb-4720-b577-d99fc560143f" />
+<img width="549" height="126" alt="Screenshot 2026-01-05 182656" src="https://github.com/user-attachments/assets/1e7ac071-8c1b-4c0c-a702-438503247901" />
+<img width="559" height="286" alt="Screenshot 2026-01-05 182758" src="https://github.com/user-attachments/assets/1f900e1b-8c17-4687-819e-1f08a54dfd19" />
+
+the script MenuManager.cs holds a list containing all of these scriptable objects. It then stores a variable for the currently selected crop, which is changed by the different crop buttons at the bottom of the screen.
+
+<img width="565" height="224" alt="Screenshot 2026-01-05 233214" src="https://github.com/user-attachments/assets/9244dbda-de10-4020-b590-d07c016b1541" />
+
+Whenever a call is made to plant a seed or spawn a crop, it will cross-reference with the menumanager to see what crop object it should be setting, and then from there is able to fetch the unique variable information held within that object.
+
+<img width="431" height="106" alt="Screenshot 2026-01-05 233144" src="https://github.com/user-attachments/assets/2e47bc9e-47a8-4eb3-bb46-33b2196b00f7" />
 
 ### Mobile Controls
 
@@ -307,7 +342,6 @@ However since the CineMachine Camera is focusing on a target to move around, we 
 If two fingers are detected on the screen, get the difference in distance between the starting position and current position for BOTH fingers. Then get the vector magnitudes of where they started and where they are now. If there is a discernable difference between the magnitude of both vectors, that indicates that the player is wanting to zoom in / out. Call the zoom function with whatever value this distance ends up being. The zoom function adjusts the CineMachine Camera's FOV slider. 
 
 <img width="744" height="340" alt="CameraPan Zoom Detection" src="https://github.com/user-attachments/assets/10b84c73-815f-4ade-a30c-a2319e1e7ea6" />
-
 
 #### Tapping
 
