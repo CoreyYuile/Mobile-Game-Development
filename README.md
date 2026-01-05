@@ -129,13 +129,34 @@ Unity ads is a framework / package that allows for the displaying of ads to be m
 
 Originally the most up-to-date version of Unity ads was used, however there seemed to be a commonly cited bug with that version where banner ads were more likely to never get loaded. For this reason Advertisement Legacy was downgraded.
 
+The order needed to display ads of any type are as follows:
+* Initialise all ads
+* Load ads in the background
+* Display ads upon request
+
+Ideally ads should be loaded as soon as possible otherwise if an ad is requested before finishing loading it can cause funky issues (such as not displaying at all for the remainder of the game or displaying two back-to-back ads upon next request)
+
+Ads init is handled in the InitialiseAds.cs script:
+
+<img width="692" height="579" alt="InitAds" src="https://github.com/user-attachments/assets/0f098373-fb0c-412d-a15f-d3a2273cf9b0" />
+
+And then ad loading is called by the AdsManager.cs script:
+
+<img width="339" height="181" alt="AdsManager" src="https://github.com/user-attachments/assets/d1df3f4e-d7c7-47ca-a147-4361460d27aa" />
+
 ##### Rewarded Ads
 
 Rewarded ads are used in this game to give the player 100 money after watching an ad. To see this in action, tap anywhere on the plus button next to the money indicator.
 
+<img width="812" height="664" alt="RewardedAd" src="https://github.com/user-attachments/assets/e6fde855-e4d1-4f27-b6cf-c570ed47efad" />
+<img width="445" height="117" alt="Display Rewarded Ad" src="https://github.com/user-attachments/assets/0004bc49-2258-4747-9763-017eaeb57539" />
+
+
 ##### Banner Ads
 
 Banner ads are shown in the game whenever the player decides to open the leaderboard while in the farm scene. This does not happen for the leaderboard seen in the main menu as we do not yet have ads initialised within that scene.
+
+<img width="552" height="626" alt="BannerAd" src="https://github.com/user-attachments/assets/856801ec-699d-4fde-854c-1f1304620b77" />
 
 #### Leaderboard Manager
 
@@ -143,30 +164,58 @@ The Leaderboard Manager is a plugin / package / framework for Unity created by D
 
 Much of the leaderboard code within this project was taken from my previous project Gravimatic (available at [https://shlumptee.itch.io/gravimatic]), which was code derived and modified from Danial's official documentation, online tutorials utilising this framework, and some code from demos.
 
+We communicate with a database created on the webpage listed above, and link both of them together using a public key (the private key is for transferring database info onto another system).
+
+From there we can make queries to our specified database in order to fetch scores.
+
+We can also do multiple other things like submit entries to the database, reset an entry, delete an entry, or show the user system's current position in the database.
+
+We can also let the player mess around with different parameters to change things like how many entries they want per page, how recent they want displayed entries to be, etc.
+
 #### APIs
 
 APIs are used to collect weather data from the player's general location. This data is then used to affect gameplay in ways such as increasing / decreasing growth time per crop or giving out bonus money for harvesting while a certain weather type is active.
 
 Any personal information gathered from these APIs are temporary and never saved for any additional usage. The data collected is only used for determining the player's realtime weather to make gameplay adjustments accordingly.
 
+This code was intended to only run the openweather API call once every 10 minutes due to a max limit of 1000 calls being allowed per day, but the current implementation doesn't really handle a case where the player keeps closing and reopening the game - effectively restarting the timer. Still, given that not many people will play the game the likelihood of that happening is far too minimal of a problem and there were higher priorities to fix at the time.
+
 ##### Locational Requests
 
 A locational request to two APIs are called in order to be able to call openweather with the correct info in order to get accurate data of the weather of the user's rough geographical location.
 
-The first API used is [https://www.ipify.org/], which is used to get the player's current IP address temporarily
+The first API used is https://www.ipify.org/, which is used to get the player's current IP address temporarily. We call the API and set the returned text to a variable used later.
 
 <img width="768" height="405" alt="IP API Call" src="https://github.com/user-attachments/assets/c0b23e87-595e-477a-bcf9-c202f6cdcd31" />
 
+We then use https://ipapi.co/ to get the longitudinal and latidunal values required for our weather request to operate. IPAPI also allows us to pick up a city nearby to the player, which we can use as flavour text to tell the player where we are pulling the weather from.
+
+Since this one is returned in JSON instead of text we will need to parse through it all using JSONUtilities. We can then assign the lon, lat, and city variables and finally allow for the fetching of weather to run
 
 <img width="1310" height="582" alt="LatLon API Call" src="https://github.com/user-attachments/assets/f71afab3-4f36-482d-a3d7-4a5d1b0ec21a" />
 
 ##### Weather Request
 
+We use OpenWeather (https://openweathermap.org/api) to fetch our weather data. Openweather allows for the fetching of many different pieces of information pertaining to geographical weather, such as a general description, humidity, temperature, etc. For the final version of Idle Farmer only a general weather description is used, however in the future I would've liked to have included temperature and so on to further affect crop growth.
 
+We call to openweather and give the variables required for the correct geographical weather close to the player, and then parse the returned JSON one final time to get the {main} description. We then split all the possible outcomes into 3 different states, string together our display text and present it on the UI.
 
 <img width="1386" height="762" alt="Weather API Call" src="https://github.com/user-attachments/assets/63cc0cc3-25cc-4f92-a782-4a0f0713f578" />
 
+##### Usage
+
+We use the general weather info for two things:
+* Determining what growth multiplier to add to a crop's growth duration
+  * Example: it is raining so half growth time
+* Determining how much to pay the player when they harvest a crop
+  * Example: it is raining to give double the payout
+ 
+<img width="652" height="304" alt="Weather growth mult" src="https://github.com/user-attachments/assets/1caf7fae-963a-436e-9184-247be15a8cab" />
+<img width="639" height="196" alt="Weather payout mult" src="https://github.com/user-attachments/assets/f8fc406a-7838-4754-a05d-88a9d104a7f1" />
+
 #### CineMachine
+
+<img width="556" height="414" alt="CineMachine" src="https://github.com/user-attachments/assets/bb935e2a-1bb0-4830-bf1c-f8d4300b57cf" />
 
 ##### Position Composer
 
@@ -176,9 +225,14 @@ Hard limits are set on the composer in order to make sure the target position do
 
 Other features of the composer were considered, such as the lookahead feature, however they resulted in camera actions that felt too janky or offputting - either feeling like the camera was overshooting way too much or just wasn't pointing towards the direction the player was aiming to go towards.
 
+<img width="550" height="325" alt="CM position composer" src="https://github.com/user-attachments/assets/a81a47b0-ff5b-4a1e-bf13-2bc46f37da40" />
+
 ##### Confiner
 
 Confiner is used to make sure that the camera doesn't go out of bounds, and instead stays within level geometry.
+
+<img width="551" height="67" alt="CM Boundaries" src="https://github.com/user-attachments/assets/91210c2f-f10b-4135-9994-e228c2a4d08c" />
+<img width="1526" height="854" alt="CM Boundaries 2" src="https://github.com/user-attachments/assets/059dad95-4658-4918-89eb-a6f808b7917a" />
 
 #### CandyCoded
 
@@ -204,7 +258,31 @@ The farm scene is where main gameplay takes place.
 
 #### Plot Unlocking
 
+Tapping on a plot is first handled by the TapManager.cs script, which will determine if a non-UI tap has been made and then try and locate what plot was tapped on. If it is able to locate said plot, it will call the HandleTap() function.
+
+This function will check if the selected plot has been unlocked. If not, then that means that we need to display a popup asking if the player wants to purchase the plot.
+
+If the player has enough money to buy the plot, we will then handle plot "unlocking" by calling the UnlockPlot() function, which will create a new gameobject with the unlocked prefab in the place of the selected plot. From there we then transfer over any necessary information needed to the script of the new "unlocked" plot, and then destroy the original plot.
+
+<img width="519" height="208" alt="Screenshot 2026-01-05 230214" src="https://github.com/user-attachments/assets/e8203e3b-0aa4-4944-8659-befe3b9237b8" />
+
+<img width="1032" height="477" alt="Screenshot 2026-01-05 230202" src="https://github.com/user-attachments/assets/53943343-f590-4569-82e4-a7aeed1e9d46" />
+
 #### Plot States
+
+An unlocked plot can be in 3 different states: empty, growing, or readytoharvest. when an unlocked plot is tapped on (handled through TapManager), we call HandleTap() to check what state the plot is in.
+
+<img width="452" height="338" alt="Screenshot 2026-01-05 230604" src="https://github.com/user-attachments/assets/f5a89519-f807-4b1d-81df-29b248a6cd48" />
+
+If the plot is empty, that means that we plant a new seed there. Please refer to the below section about how crop type is decided.
+
+<img width="836" height="584" alt="Screenshot 2026-01-05 230540" src="https://github.com/user-attachments/assets/ba31c82e-79f5-4602-9bc7-b78618073d28" />
+
+If the plot is growing, we do nothing
+
+If the plot is ready to harvest, we call the HarvestCrop() function, which will pay the player and destroy the crop gameobject, and reset the plot back to empty.
+
+<img width="732" height="840" alt="Screenshot 2026-01-05 230554" src="https://github.com/user-attachments/assets/9c42b93f-798f-4e38-b0f3-78370fbd2f00" />
 
 #### Crop Selection and Handling
 
