@@ -34,22 +34,32 @@ public class Leaderboard : MonoBehaviour
 
     private Coroutine _personalEntryMoveCoroutine;
 
+    // !! THIS SCRIPT WAS TAKEN FROM A PREVIOUS PROJECT !!
+    // !! If I remember correctly, a lot of this was derived from official documentation and the demo setup. A lot has been modified to change it however. !!
+
+    // Send a database query based off of values the player can change
     public void Load()
     {
+
+        // Get correct time period the player has asked for through the dropdown
+        // !! REMOVED THIS TO FREE UP SPACE, COULD DELETE THIS IN CLEANUP??? !!
         var timePeriod =
             _timePeriodDropdown.value == 1 ? Dan.Enums.TimePeriodType.Today :
             _timePeriodDropdown.value == 2 ? Dan.Enums.TimePeriodType.ThisWeek :
             _timePeriodDropdown.value == 3 ? Dan.Enums.TimePeriodType.ThisMonth :
             _timePeriodDropdown.value == 4 ? Dan.Enums.TimePeriodType.ThisYear : Dan.Enums.TimePeriodType.AllTime;
 
+        // Get the specified page number
         var pageNumber = int.TryParse(_pageInput.text, out var pageValue) ? pageValue : _defaultPageNumber;
         pageNumber = Mathf.Max(1, pageNumber);
         _pageInput.text = pageNumber.ToString();
 
+        // Get the requested amount of entries to display per page
         var take = int.TryParse(_entriesToTakeInput.text, out var takeValue) ? takeValue : _defaultEntriesToTake;
         take = Mathf.Clamp(take, 1, 100);
         _entriesToTakeInput.text = take.ToString();
 
+        // Set up the search query that will be sent to database
         var searchQuery = new LeaderboardSearchQuery
         {
             Skip = (pageNumber - 1) * take,
@@ -57,31 +67,47 @@ public class Leaderboard : MonoBehaviour
             TimePeriod = timePeriod
         };
 
-        _pageInput.image.color = Color.white;
-        _entriesToTakeInput.image.color = Color.white;
-
+        // Send off request, call OnLeaderboardLoaded if all goes well
         Leaderboards.Mobile.GetEntries(searchQuery, OnLeaderboardLoaded, ErrorCallback);
         ToggleLoadingPanel(true);
     }
 
+    // Increment / decrement page number
     public void ChangePageBy(int amount)
     {
+        // Get the pagenumber from the text UI
         var pageNumber = int.TryParse(_pageInput.text, out var pageValue) ? pageValue : _defaultPageNumber;
+        // Increment by specified amount
         pageNumber += amount;
-        if (pageNumber < 1) return;
+        // If the player tries anything funny like setting it below 1, exit out
+        if (pageNumber < 1)
+        {
+            return;
+        }
+        // Set UI text to reflect the change
         _pageInput.text = pageNumber.ToString();
 
+        // Call to load the entries for the new page
         Load();
     }
 
+    // Called if the search query returns with data
     private void OnLeaderboardLoaded(Entry[] entries)
     {
+        // Clear all the old entries if changing page
         foreach (Transform t in _entryDisplayParent)
+        {
             Destroy(t.gameObject);
+        }
 
+        // Add in all the new entries
         foreach (var t in entries)
-            CreateEntryDisplay(t);
+        {
+            var entryDisplay = Instantiate(_entryDisplayPrefab.gameObject, _entryDisplayParent);
+            entryDisplay.GetComponent<EntryDisplay>().SetEntry(t);
+        }
 
+        // Finished loading
         ToggleLoadingPanel(false);
     }
 
@@ -92,13 +118,17 @@ public class Leaderboard : MonoBehaviour
         _leaderboardLoadingPanel.blocksRaycasts = isOn;
     }
 
+    // Used for the player position button, slide out a submenu with details
     public void MovePersonalEntryMenu(float xPos)
     {
         if (_personalEntryMoveCoroutine != null)
+        {
             StopCoroutine(_personalEntryMoveCoroutine);
+        }
         _personalEntryMoveCoroutine = StartCoroutine(MoveMenuCoroutine(_personalEntryPanel, new Vector2(_personalEntryPanel.anchoredPosition.x, xPos)));
     }
 
+    // Animation for the submenu moving out
     private IEnumerator MoveMenuCoroutine(RectTransform rectTransform, Vector2 anchoredPosition)
     {
         const float duration = 0.25f;
@@ -115,12 +145,7 @@ public class Leaderboard : MonoBehaviour
         _personalEntryMoveCoroutine = null;
     }
 
-    private void CreateEntryDisplay(Entry entry)
-    {
-        var entryDisplay = Instantiate(_entryDisplayPrefab.gameObject, _entryDisplayParent);
-        entryDisplay.GetComponent<EntryDisplay>().SetEntry(entry);
-    }
-
+    // Small animation to signify that the leaderboard is still loading
     private IEnumerator LoadingTextCoroutine(TMP_Text text)
     {
         var loadingText = "Loading";
@@ -134,6 +159,7 @@ public class Leaderboard : MonoBehaviour
         StartCoroutine(LoadingTextCoroutine(text));
     }
 
+    // Initialise UI listeners and show the loading screen while everything loads in the load function
     private void InitializeComponents()
     {
         StartCoroutine(LoadingTextCoroutine(_leaderboardLoadingPanel.GetComponentInChildren<TextMeshProUGUI>()));
@@ -157,29 +183,36 @@ public class Leaderboard : MonoBehaviour
 
     private IEnumerator Start()
     {
+        // Setup everything, load entries
         InitializeComponents();
         Load();
         
         Debug.Log(PlayerPrefs.GetString("PlayerName"));
         //PlayerPrefs.DeleteKey("PlayerName");
+        // Check that there is a username for the player
         if (PlayerPrefs.GetString("PlayerName") == null || PlayerPrefs.GetString("PlayerName") == "")
         {
+            // If there is no username, generate a random one
             yield return (StartCoroutine(GenerateRandomPlayerName()));
         }
         Debug.Log(PlayerPrefs.GetString("PlayerName"));
         PlayerNameInputPlaceholder.text = PlayerPrefs.GetString("PlayerName");
     }
 
+    // Upload a new score
     public void Submit(string playerUsername, int score)
     {
-        Leaderboards.Mobile.UploadNewEntry(playerUsername, score, null, ErrorCallback);
+        Leaderboards.Mobile.UploadNewEntry(playerUsername, score, Callback, ErrorCallback);
     }
 
+    // Delete the player's entry
     public void DeleteEntry()
     {
         Leaderboards.Mobile.DeleteEntry(Callback, ErrorCallback);
     }
 
+
+    // Completely remove the player's entry from the leaderboard and reset name
     public void ResetPlayer()
     {
         LeaderboardCreator.ResetPlayer();
@@ -187,6 +220,7 @@ public class Leaderboard : MonoBehaviour
         PlayerNameInputPlaceholder.text = PlayerPrefs.GetString("PlayerName");
     }
 
+    // Set new name to whatever the player chooses, save it
     public void ChangePlayerName()
     {
         string playerName = playerNameInputText.text;
@@ -194,17 +228,20 @@ public class Leaderboard : MonoBehaviour
         PlayerNameInputPlaceholder.text = PlayerPrefs.GetString("PlayerName");
     }
 
+    // Request the personal entry of the player, callback to OnPersonalEntryLoaded if successful
     public void GetPersonalEntry()
     {
         Leaderboards.Mobile.GetPersonalEntry(OnPersonalEntryLoaded, ErrorCallback);
     }
 
+    // Set the text to the data provided, begin the submenu movement anim
     private void OnPersonalEntryLoaded(Entry entry)
     {
         _personalEntryText.text = $"{entry.RankSuffix()}. {entry.Username} : {entry.Score}";
         MovePersonalEntryMenu(0f);
     }
 
+    // Default callback
     private void Callback(bool success)
     {
         if (success)
@@ -213,17 +250,20 @@ public class Leaderboard : MonoBehaviour
         }
     }
 
+    // Callback for if there is an error with anything
     private void ErrorCallback(string error)
     {
         Debug.LogError(error);
     }
 
+    // Make a new name for the player
     private IEnumerator GenerateRandomPlayerName()
     {
         PlayerPrefs.SetString("PlayerName", ("Player#" + UnityEngine.Random.Range(1000, 9999)));
         yield return null;
     }
 
+    // Get the player's name from the playerprefs
     public void LoadPlayername()
     {
         PlayerNameInputPlaceholder.text = PlayerPrefs.GetString("PlayerName");

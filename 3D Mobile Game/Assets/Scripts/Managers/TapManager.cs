@@ -131,6 +131,7 @@ public class TapManager : MonoBehaviour
 
     private void AutoPlant()
     {
+        // FindObjectsOfType is obsolete, apparently this is faster??
         FarmPlot[] plots = FindObjectsByType<FarmPlot>(FindObjectsSortMode.None);
 
         // Loop through all plots, find what ones are empty, and plant the selected crop in them

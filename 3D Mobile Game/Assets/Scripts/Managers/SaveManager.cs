@@ -67,19 +67,21 @@ public class SaveManager : MonoBehaviour
             // If the state was currently growing something, we'll need to convert the UTC time to game ticks to store easier
             if (plot.state == FarmPlot.PlotState.Growing)
             {
-                plotData.plantedTimeTicks = plot.plantedUTCTime == DateTime.MinValue ? 0 : plot.plantedUTCTime.Ticks;
+                plotData.plantedTimeTicks = plot.plantedTime == DateTime.MinValue ? 0 : plot.plantedTime.Ticks;
             }
             // Otherwise just leave it as 0
             else
             {
                 plotData.plantedTimeTicks = 0;
             }
+            // Get the name of the crop currently planted (if any)
             if (plot.currentCrop != null)
             {
                 plotData.crop = plot.currentCrop.cropName;
             }
             else
             {
+                // Keep this space blank if no crops on the plot
                 plotData.crop = "";
             }
 
@@ -98,7 +100,7 @@ public class SaveManager : MonoBehaviour
         SaveData data = ReadSave();
         if (data == null)
         {
-            Debug.Log("No save found - new game.");
+            Debug.Log("No save found, new game");
             return;
         }
 
@@ -140,7 +142,7 @@ public class SaveManager : MonoBehaviour
         if (File.Exists(savePath))
         {
             File.Delete(savePath);
-            Debug.Log("Save deleted");
+            Debug.Log("Deleted save");
         }
     }
 }

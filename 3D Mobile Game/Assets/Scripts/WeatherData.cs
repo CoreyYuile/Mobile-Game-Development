@@ -57,8 +57,11 @@ public class WeatherData : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Wait until APIs fetch the required data for openweather to operate
-        if (!isLocationInitialized) return;
+        // Wait until APIs fetch the required data needed for openweather to get the right data
+        if (!isLocationInitialized)
+        {
+            return;
+        }
 
         // Update the weather every hour (only have something like 1000 requests free per day)
         // !! CHANGE THIS TO DATETIME STUFF !!
@@ -78,7 +81,7 @@ public class WeatherData : MonoBehaviour
     private IEnumerator GetIP()
     {
         // Send request to website
-        var www = new UnityWebRequest("https://api.ipify.org?format=text")
+        var www = new UnityWebRequest("https://api.ipify.org")
         {
             downloadHandler = new DownloadHandlerBuffer()
         };
@@ -94,17 +97,20 @@ public class WeatherData : MonoBehaviour
 
         // If reached this point, IP is obtained and can move to accessing lat / lon for city location
         IPAddress = www.downloadHandler.text;
-        StartCoroutine(GetCoordinates());
+        StartCoroutine(GetLatAndLon());
     }
 
     // Get latitude and longitude coordinates
-    private IEnumerator GetCoordinates()
+    // !! REALISED THAT IPAPI CAN GET THE IP ADDRESS, MAYBE REWORK THIS AND REMOVE IPIFY??? !!
+    private IEnumerator GetLatAndLon()
     {
         // Send request to website
         var www = new UnityWebRequest("https://ipapi.co/" + IPAddress + "/json/")
         {
             downloadHandler = new DownloadHandlerBuffer()
         };
+
+        // I don't know why this is needed or why the request decided to stop randomly without it but it took me too long to find how to fix it and I'm not gonna question it
         www.SetRequestHeader("User-Agent", "Unity3D");
 
         yield return www.SendWebRequest();
@@ -121,9 +127,11 @@ public class WeatherData : MonoBehaviour
         latitude = locationData.latitude;
         longitude = locationData.longitude;
         cityName = locationData.city;
+
+        // Variables set to allow openweather to run
         isLocationInitialized = true;
         timer = 0;
-        Debug.Log($"Location found: {cityName} ({latitude}, {longitude})");
+        Debug.Log($"Location found {cityName}, {latitude}, {longitude}");
     }
 
     // Get the weather from openweather
@@ -133,7 +141,7 @@ public class WeatherData : MonoBehaviour
         UnityWebRequest www = UnityWebRequest.Get("https://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longitude + "&appid=" + OWAPIKey + "&units=metric");
         yield return www.SendWebRequest();
 
-        // Check for error
+        // Check for if there is an error
         if (www.result != UnityWebRequest.Result.Success)
         {
             Debug.LogError("Weather request failed: " + www.error);
@@ -146,6 +154,7 @@ public class WeatherData : MonoBehaviour
         // Get current weather from JSON
         currentWeather = weather.weather[0].main;
 
+        // Split the main weather description into one of 3 different enum types
         if (currentWeather == "Rain" || currentWeather == "Drizzle" || currentWeather == "Thunderstorm")
         {
             currentWeatherType = WeatherType.rain;

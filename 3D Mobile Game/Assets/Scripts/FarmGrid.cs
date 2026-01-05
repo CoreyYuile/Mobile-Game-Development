@@ -111,7 +111,7 @@ public class FarmGrid : MonoBehaviour
 
             plot.isOwned = plotSave.isOwned;
 
-            // ---------- RESTORE PLOT STATE ----------
+            // RESTORE PLOT STATE STARTS HERE
             if (!Enum.TryParse(plotSave.state, out FarmPlot.PlotState loadedState))
             {
                 loadedState = FarmPlot.PlotState.Empty;
@@ -119,6 +119,8 @@ public class FarmGrid : MonoBehaviour
 
             plot.state = loadedState;
             Enum.TryParse(plotSave.crop, out CropData.CropIDs cropID);
+
+            // Use menumanager's list to cross-reference the crop ID and get the right scriptable object
             CropData cropData = MenuManager.Instance.GetCropID(cropID);
 
 
@@ -127,9 +129,9 @@ public class FarmGrid : MonoBehaviour
             if (plotSave.plantedTimeTicks > 0)
             {
                 // Convert back to UTC DateTime
-                plot.plantedUTCTime = new DateTime(plotSave.plantedTimeTicks, DateTimeKind.Utc);
+                plot.plantedTime = new DateTime(plotSave.plantedTimeTicks, DateTimeKind.Utc);
                 // Calculate how long its been in seconds since the crop was planted
-                double elapsed = (DateTime.UtcNow - plot.plantedUTCTime).TotalSeconds;
+                double elapsed = (DateTime.UtcNow - plot.plantedTime).TotalSeconds;
 
                 // !! FIX THIS TO USE CROPDATA GROWTH TIME !!
                 // If its been growing for longer than growthDuration, then state needs to be changed

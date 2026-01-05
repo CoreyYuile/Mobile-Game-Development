@@ -36,7 +36,7 @@ public class FarmPlot : MonoBehaviour
     public int gridX;
     public int gridZ;
 
-    public DateTime plantedUTCTime;
+    public DateTime plantedTime;
 
     //[Header("References")]
 
@@ -54,7 +54,7 @@ public class FarmPlot : MonoBehaviour
         if (state == PlotState.Growing && currentCrop != null)
         {
             // Check if elapsed time has gone past growthDuration
-            double elapsedSeconds = (DateTime.UtcNow - plantedUTCTime).TotalSeconds;
+            double elapsedSeconds = (DateTime.UtcNow - plantedTime).TotalSeconds;
 
             float growthMultiplier = 1.0f;
 
@@ -70,7 +70,7 @@ public class FarmPlot : MonoBehaviour
             {
                 // Change state and update visuals
                 state = PlotState.ReadyToHarvest;
-                Debug.Log($"{name}: crop is ready to harvest!");
+                Debug.Log($"Crop is ready to harvest at {name}!");
 
                 PhoneVibration.Instance.MediumVibration();
 
@@ -112,7 +112,7 @@ public class FarmPlot : MonoBehaviour
 
             // If the seed is still growing, do nothing (for now)
             case PlotState.Growing:
-                Debug.Log($"{name}: crop is still growing...");
+                Debug.Log($"crop is still growing at {name}");
                 break;
 
             // If ready to harvest, handle harvesting
@@ -128,11 +128,11 @@ public class FarmPlot : MonoBehaviour
         currentCrop = cropdata;
 
         // Get the time that the seed was planted
-        plantedUTCTime = DateTime.UtcNow;
+        plantedTime = DateTime.UtcNow;
 
         // Change state
         state = PlotState.Growing;
-        Debug.Log($"{name}: planted a seed!");
+        Debug.Log($"Planted a seed at {name}");
 
         // Instantiate the seed prefab at the anchor position on the plot
         if (seedlingPrefab)
@@ -255,9 +255,11 @@ public class FarmPlot : MonoBehaviour
     // !! THERE HAS TO BE A BETTER WAY TO DO THIS THERE HAS TO BE A BETTER WAY TO DO THIS THERE HAS TO BE A BETTER WAY TO DO THIS !!
     public void SpawnSeed(CropData cropData)
     {
+        // Set current crop to cropdata found in save
         currentCrop = cropData;
 
-        if (seedlingPrefab == null)
+        // Exit out if there is nothing in the cropdata's prefab
+        if (cropData.seedlingPrefab == null)
         {
             return;
         }
@@ -265,12 +267,17 @@ public class FarmPlot : MonoBehaviour
         {
             cropAnchor = transform;
         }
+        // This shouldn't happen, but best just to make sure that a crop hasn't already been accidentally placed in there
         if (currentCropPrefab)
         {
             Destroy(currentCropPrefab);
         }
 
+        // Instantiate the crop on the plot
         GameObject crop = Instantiate(cropData.seedlingPrefab, cropAnchor.position, cropAnchor.rotation);
+
+        // Have to add this otherwise it scales horifically but don't have to for crop spawning???
+        // !! FIGURE OUT WHY?!?!? !!
         crop.transform.SetParent(cropAnchor, true);
         crop.transform.localScale = Vector3.one;
         currentCropPrefab = crop;
@@ -280,9 +287,11 @@ public class FarmPlot : MonoBehaviour
     {
         //Debug.Log(cropData.name);
 
+        // Set current crop to cropdata found in save
         currentCrop = cropData;
 
-        if (grownPrefab == null)
+        // Exit out if there is nothing in the cropdata's prefab
+        if (cropData.grownPrefab == null)
         {
             return;
         }
@@ -290,11 +299,13 @@ public class FarmPlot : MonoBehaviour
         {
             cropAnchor = transform;
         }
+        // This shouldn't happen, but best just to make sure that a crop hasn't already been accidentally placed in there
         if (currentCropPrefab)
         {
             Destroy(currentCropPrefab);
         }
 
+        // Instantiate the crop on the plot
         GameObject crop = Instantiate(cropData.grownPrefab, cropAnchor.position, cropAnchor.rotation, cropAnchor);
         //crop.transform.localScale = Vector3.one;
         currentCropPrefab = crop;

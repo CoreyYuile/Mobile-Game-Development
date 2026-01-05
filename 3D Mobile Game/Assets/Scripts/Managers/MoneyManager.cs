@@ -9,9 +9,6 @@ public class MoneyManager : MonoBehaviour
 
     public static MoneyManager Instance { get; private set; }
 
-    public event Action<int> onMoneyChanged;
-    public event Action<int> onNetMoneyChanged;
-
     [Header("Money Settings")]
 
     public int startMoney = 100;
@@ -37,8 +34,7 @@ public class MoneyManager : MonoBehaviour
         {
             currentMoney = startMoney;
         }
-        onMoneyChanged?.Invoke(currentMoney);
-        onNetMoneyChanged?.Invoke(netMoney);
+        MenuManager.Instance.UpdateMoneyDisplay(currentMoney);
     }
 
     public int GetMoney()
@@ -57,10 +53,11 @@ public class MoneyManager : MonoBehaviour
         currentMoney += amount;
         netMoney += amount;
 
-        onMoneyChanged?.Invoke(currentMoney);
-        onNetMoneyChanged?.Invoke(netMoney);
+        // Update money text
+        MenuManager.Instance.UpdateMoneyDisplay(currentMoney);
 
-        Debug.Log($"+{amount} money added, total: {currentMoney}, net worth: {netMoney}");
+        Debug.Log($"{amount} money added, total: {currentMoney}, net worth: {netMoney}");
+        // Submit new netMoney to leaderboard
         Leaderboard.Instance.Submit(PlayerPrefs.GetString("PlayerName"), netMoney);
     }
 
@@ -74,8 +71,8 @@ public class MoneyManager : MonoBehaviour
         }
 
         currentMoney -= amount;
-        onMoneyChanged?.Invoke(currentMoney);
-        onNetMoneyChanged?.Invoke(netMoney);
+
+        MenuManager.Instance.UpdateMoneyDisplay(currentMoney);
 
         Debug.Log($"Money spent: -{amount}, Total: {currentMoney}, NetWorth: {netMoney}");
         return true;
