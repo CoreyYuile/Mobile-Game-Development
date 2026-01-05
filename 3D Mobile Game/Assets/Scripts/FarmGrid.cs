@@ -39,7 +39,7 @@ public class FarmGrid : MonoBehaviour
             return;
         }
 
-        // Mid point (used later)
+        // Mid point (used for the starting plots the player gets for free)
         int centerX = gridWidth / 2;
         int centerZ = gridHeight / 2;
 
@@ -88,11 +88,17 @@ public class FarmGrid : MonoBehaviour
         // Loop through every plot read from the save file
         foreach (var plotSave in savedPlots)
         {
-            // Find the matching plot by grid coordinates
-            FarmPlot plot = allPlots.Find(p =>
-                p.gridX == plotSave.xIndex &&
-                p.gridZ == plotSave.zIndex
-            );
+            // Find the matching plot by using grid coordinates
+            FarmPlot plot = null;
+
+            foreach(var p in allPlots)
+            {
+                if (p.gridX == plotSave.xIndex && p.gridZ == plotSave.zIndex)
+                {
+                    plot = p;
+                    break;
+                }
+            }
 
             // If nothing is found for a specific plot, log it (ideally this should not happen anymore)
             if (plot == null)
@@ -102,8 +108,6 @@ public class FarmGrid : MonoBehaviour
             }
 
             // Swap prefab if unlocked or not
-            //bool shouldBeOwned = plotSave.isOwned;
-
             if (plot.isOwned != plotSave.isOwned)
             {
                 plot = SwapPrefab(plot, plotSave.isOwned ? unlockedPlotPrefab : lockedPlotPrefab);
@@ -111,7 +115,7 @@ public class FarmGrid : MonoBehaviour
 
             plot.isOwned = plotSave.isOwned;
 
-            // RESTORE PLOT STATE STARTS HERE
+            // RESTORING PLOT STATE STARTS HERE
             if (!Enum.TryParse(plotSave.state, out FarmPlot.PlotState loadedState))
             {
                 loadedState = FarmPlot.PlotState.Empty;
