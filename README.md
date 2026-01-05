@@ -188,6 +188,32 @@ The farm scene is where main gameplay takes place.
 
 ### Mobile Controls
 
+#### Camera Panning
+
+Panning the camera is handled in the CameraPan.cs script. This script determines when the player is swiping to pan the camera or pinch to zoom in / out.
+
+##### Panning
+
+If there is one finger on the screen, get the distance between it's starting position and current position. Then calculate the movement direction the player is swiping in.
+
+This is a bit more complex than if the camera was top-down since Idle Farmer's camera is angled slightly, and therefore camforward and camright are used to make sure that the camera still pans across the horizontal plane appropriately.
+
+However since the CineMachine Camera is focusing on a target to move around, we apply the translation to the target object instead of the Camera. This target also needs rough boundaries to make sure that it doesn't go too far outside the game scene and leave our camera behind, so the position of the target is clamped to similar level boundaries as the camera.
+
+SCREENSHOT HERE
+
+##### Zooming
+
+If two fingers are detected on the screen, get the difference in distance between the starting position and current position for BOTH fingers. Then get the vector magnitudes of where they started and where they are now. If there is a discernable difference between the magnitude of both vectors, that indicates that the player is wanting to zoom in / out. Call the zoom function with whatever value this distance ends up being. The zoom function adjusts the CineMachine Camera's FOV slider. 
+
+#### Tapping
+
+Tapping on the screen is handled in the TapManager.cs script.
+
+This will first check to make sure that the player is not just tapping on the screen to pan the camera. If they are not doing this, that means that the player is indicating they are tapping on something. In this game, tapping is only used for UI selections (which this script will ignore a tap made if it is over a UI item) or for interacting with one of the many farm plots.
+
+Try selecting whatever plot the player's tap ended up being over. To do this we cast a ray forward from the camera. If we hit an object with the FarmPlot component, then we know that we have found a farm plot. Call the FarmPlot's HandleTap() function to deal with whatever is needed.
+
 ### "AutoHarvest" / "AutoPlant"
 
 These terms refer to the gameplay addition of shaking the mobile device to either plant or harvest. In hindsight there is definitely a better and more concise name for this, however at the time this is what I called then in development.
