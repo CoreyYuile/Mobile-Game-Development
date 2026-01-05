@@ -327,6 +327,8 @@ Various assets and tutorials were used and adapted in the creation of this game.
 * API Requests
   * https://youtu.be/2vjpwNFU5To?si=cZu6mcsaXmkxyB1i
   * https://youtu.be/PnCtUemkqZs?si=hYMk8ds0ZP7v-QBV
+* Haptics
+  * https://youtu.be/KLorLToQ3mY?si=_zRT_5GmXMqQv6cM
 
 ### Credits
 
