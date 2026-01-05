@@ -6,7 +6,8 @@
 
 Welcome to the official documentation for my mobile game project uploaded for BCU's CMP6187 Mobile Game Development module. This documentation will give a comprehensive guide through all relevant features pertaining to CMP6187's mark scheme as well as other features specific to the gameplay of this project. It will also give a brief overview of folder structure as well as showing development screenshots and design concepts. Finally this documentation will also link any relevant tutorials or assets used in the creation of this project.
 
-For a more in depth explanation purely on the features relevant to CMP6187's assignment brief please refer to the video supplied in the .zip upload to Moodle.
+
+There is also a video included in the .zip folder uploaded to Moodle that will explain specifically Frameworks and Mobile Features.
 
 If you have any inquiries please contact me!
 
