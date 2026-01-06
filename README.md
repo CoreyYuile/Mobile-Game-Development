@@ -420,6 +420,8 @@ Various assets and tutorials were used and adapted in the creation of this game.
 
 ### References
 
+The following are references to youtube tutorials used. A lot of documentation reading was also used to make this project, which will not be listed here.
+
 * Scriptable Objects
   * https://youtu.be/7jxS8HIny3Q?si=GLCORJSPPeP3tTsj
   * https://youtu.be/7jxS8HIny3Q?si=zg3SiVK8MpiEA2Ki
