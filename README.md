@@ -6,7 +6,7 @@
 
 Welcome to the official documentation for my mobile game project uploaded for BCU's CMP6187 Mobile Game Development module. This documentation will give a comprehensive guide through all relevant features pertaining to CMP6187's mark scheme as well as other features specific to the gameplay of this project. It will also give a brief overview of folder structure as well as showing development screenshots and design concepts. Finally this documentation will also link any relevant tutorials or assets used in the creation of this project.
 
-The game developed is a idle / offline farming game made within Unity 6000.0.58f2. The genre is hyper-casual and theme was low-poly modern farms.
+The game developed is a idle / offline farming game made within Unity 6000.0.58f2. The genre is hyper-casual and theme was low-poly modern farms. The minimum Android API level to run this game is 23+, and target SDK is 36.
 
 There is also a video included in the .zip folder uploaded to Moodle that will explain specifically Frameworks and Mobile Features.
 
