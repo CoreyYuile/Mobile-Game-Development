@@ -6,7 +6,9 @@
 
 Welcome to the official documentation for my mobile game project uploaded for BCU's CMP6187 Mobile Game Development module. This documentation will give a comprehensive guide through all relevant features pertaining to CMP6187's mark scheme as well as other features specific to the gameplay of this project. It will also give a brief overview of folder structure as well as showing development screenshots and design concepts. Finally this documentation will also link any relevant tutorials or assets used in the creation of this project.
 
-The game developed is a idle / offline farming game made within Unity 6000.0.58f2. The genre is hyper-casual and theme was low-poly modern farms.
+The game developed is a idle / offline farming game made within Unity 6000.0.58f2. The genre is hyper-casual and theme was low-poly modern farms. The minimum Android API level to run this game is 23+, and target SDK is 36.
+
+The usage of AI was only ever used in this project for debugging purposes, such as explaining why a failed implementation would not work and giving suggestions (but never code) about documentation and concepts to look into to get the implementation working - which would only be used as a fallback option for if I ran out of ideas on how to get a feature working (usually trying around 3-5 different attempts before asking for debugging help). It was also used to briefly explain a few advanced concepts seen in tutorials and research to help aid understanding. AI was never used to generate code or assets, and was explicitally prompted to avoid generating code within its responses. Likewise AI generated code was not used within the creation of this project.
 
 There is also a video included in the .zip folder uploaded to Moodle that will explain specifically Frameworks and Mobile Features.
 
@@ -419,6 +421,8 @@ The following are a selection of screenshots and concept drawings taken during d
 Various assets and tutorials were used and adapted in the creation of this game. Any resources used will be listed within this section.
 
 ### References
+
+The following are references to youtube tutorials used. A lot of documentation reading was also used to make this project, which will not be listed here.
 
 * Scriptable Objects
   * https://youtu.be/7jxS8HIny3Q?si=GLCORJSPPeP3tTsj
